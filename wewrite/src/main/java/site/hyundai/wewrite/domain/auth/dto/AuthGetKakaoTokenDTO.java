@@ -12,4 +12,9 @@ import lombok.NoArgsConstructor;
 public class AuthGetKakaoTokenDTO {
 
     private String accessToken;
+
+    private String userId;
+    private String userName;
+    private String userEmail;
+    private String userImage;
 }

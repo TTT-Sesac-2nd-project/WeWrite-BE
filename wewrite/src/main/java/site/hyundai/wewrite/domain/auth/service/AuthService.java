@@ -47,82 +47,139 @@ public class AuthService {
     private final ResponseUtil responseUtil;
     private final JwtTokenProvider jwtTokenProvider;
 
+//    @Transactional
+//    public ResponseSuccessDTO<AuthGetKakaoTokenDTO> getTokenAndUserInfo(String authorization_code, String redirect_base) throws IOException {
+//        String access_Token = "";
+//        String refresh_Token = "";
+//        AuthGetKakaoTokenDTO responseDto = new AuthGetKakaoTokenDTO();
+//        HashMap<String, Object> resultMap = new HashMap<>();
+//
+//        String requestURL = get_token_url;
+//
+//        URL url = new URL(requestURL);
+//        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//
+//        //POST 요청을 위해 기본값이 false인 setDoOutput을 true로
+//        connection.setRequestMethod("POST");
+//        connection.setDoOutput(true);
+//
+//        // POST 요청에 필요로 요구하는 파라미터 스트림을 통해 전송
+//        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
+//        StringBuilder sb = new StringBuilder();
+//
+//        sb.append("grant_type=authorization_code");
+//        sb.append("&client_id=" + client_id); // TODO REST_API_KEY 입력
+//        sb.append("&redirect_uri=" + redirect_base+"/oauth/kakao"); // TODO 인가코드 받은 redirect_uri 입력
+//        sb.append("&prompt=login");
+//        sb.append("&code=" + authorization_code);
+//        bw.write(sb.toString());
+//        bw.flush();
+//        //인가코드로 토큰 받아오기
+//        log.info(sb.toString());
+//        //결과 코드가 200이라면 성공
+//        int responseCode = connection.getResponseCode();
+//        log.info("get_token_res_code : {}", responseCode);
+//
+//        if(responseCode == 400){
+//            //Error
+//            throw new NotAuthorizedUserException("인가 코드로 토큰 받는 과정에서 오류");
+////            responseDto.setMessage("인가 코드로 토큰 받는 과정에서 오류");
+////            responseDto.setStatus_code(450);
+////            return responseDto;
+//        }
+//        //요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
+//        BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+//        String line = "";
+//        String result = "";
+//
+//        while ((line = br.readLine()) != null) {
+//            result += line;
+//        }
+//
+//        //Gson 라이브러리에 포함된 클래스로 JSON파싱 객체 생성
+//        JsonParser parser = new JsonParser();
+//        JsonElement element = parser.parse(result);
+//
+//        access_Token = element.getAsJsonObject().get("access_token").getAsString();
+//        refresh_Token = element.getAsJsonObject().get("refresh_token").getAsString();
+//
+//        log.info("access_token : {}", access_Token);
+//        log.info("refresh_token : {}", refresh_Token);
+//
+//        //access-token을 파싱 하여 카카오 id가 디비에 있는지 확인
+//        String user_id = httpUtil.parseToken(access_Token);
+//        log.info("parse result : {}", user_id);
+//
+//        if(user_id == null){ //카카오에서 에러 래요
+//            log.error("유효하지 않은 토큰");
+//            throw new BadVariableRequestException("유효 하지 않은 토큰입니다.");
+////            responseDto.setStatus_code(400);
+////            responseDto.setMessage("토큰 파싱과정에서 오류");
+////            return responseDto;
+//        }
+//        else{ //DB에 회원정보있어? 없으면 insert하고 리턴
+//            String url2 = "https://kapi.kakao.com/v1/oidc/userinfo";
+//
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+//            headers.setBearerAuth(access_Token);
+//
+//            MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+//
+//            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+//            RestTemplate restTemplate = new RestTemplate();
+//            ResponseEntity<OpenIdResponseDto> response = restTemplate.exchange(url2, HttpMethod.GET, request, OpenIdResponseDto.class);
+//
+//            OpenIdResponseDto openIdResponseDto = response.getBody();
+//            String picture = openIdResponseDto.getPicture();
+//            picture = picture.replace("http", "https");
+//            User user = User.builder()
+//                    .userId(openIdResponseDto.getSub())
+//                    .userEmail(openIdResponseDto.getEmail())
+//                    .userImage(picture)
+//                    .userName(openIdResponseDto.getNickname())
+//                    .build();
+//            Optional<User> byId = userRepository.findById(user_id);
+//
+//            userRepository.save(user);
+//        }
+//        AuthGetKakaoTokenDTO dto = new AuthGetKakaoTokenDTO();
+//        ResponseSuccessDTO<AuthGetKakaoTokenDTO> res = responseUtil.successResponse(dto,HttpStatus.OK);
+//        dto.setAccessToken(access_Token);
+//
+////        responseDto.setMessage("로그인 성공, 토큰 리턴");
+////        responseDto.setStatus_code(200);
+//        return res;
+//    }
+
+
     @Transactional
-    public ResponseSuccessDTO<AuthGetKakaoTokenDTO> getTokenAndUserInfo(String authorization_code, String redirect_base) throws IOException {
-        String access_Token = "";
-        String refresh_Token = "";
-        AuthGetKakaoTokenDTO responseDto = new AuthGetKakaoTokenDTO();
-        HashMap<String, Object> resultMap = new HashMap<>();
+    public ResponseSuccessDTO<AuthGetKakaoTokenDTO> getJwtToken(String accessToken){
+        if(accessToken==null) {
+            throw new EntityNullException("access_token이 NULL 입니다");
 
-        String requestURL = get_token_url;
-
-        URL url = new URL(requestURL);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-        //POST 요청을 위해 기본값이 false인 setDoOutput을 true로
-        connection.setRequestMethod("POST");
-        connection.setDoOutput(true);
-
-        // POST 요청에 필요로 요구하는 파라미터 스트림을 통해 전송
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("grant_type=authorization_code");
-        sb.append("&client_id=" + client_id); // TODO REST_API_KEY 입력
-        sb.append("&redirect_uri=" + redirect_base+"/oauth/kakao"); // TODO 인가코드 받은 redirect_uri 입력
-        sb.append("&prompt=login");
-        sb.append("&code=" + authorization_code);
-        bw.write(sb.toString());
-        bw.flush();
-        //인가코드로 토큰 받아오기
-        log.info(sb.toString());
-        //결과 코드가 200이라면 성공
-        int responseCode = connection.getResponseCode();
-        log.info("get_token_res_code : {}", responseCode);
-
-        if(responseCode == 400){
-            //Error
-            throw new NotAuthorizedUserException("인가 코드로 토큰 받는 과정에서 오류");
-//            responseDto.setMessage("인가 코드로 토큰 받는 과정에서 오류");
-//            responseDto.setStatus_code(450);
-//            return responseDto;
-        }
-        //요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
-        BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        String line = "";
-        String result = "";
-
-        while ((line = br.readLine()) != null) {
-            result += line;
         }
 
-        //Gson 라이브러리에 포함된 클래스로 JSON파싱 객체 생성
-        JsonParser parser = new JsonParser();
-        JsonElement element = parser.parse(result);
+        log.info("access_token : {}", accessToken);
 
-        access_Token = element.getAsJsonObject().get("access_token").getAsString();
-        refresh_Token = element.getAsJsonObject().get("refresh_token").getAsString();
-
-        log.info("access_token : {}", access_Token);
-        log.info("refresh_token : {}", refresh_Token);
 
         //access-token을 파싱 하여 카카오 id가 디비에 있는지 확인
-        String user_id = httpUtil.parseToken(access_Token);
+        String user_id = httpUtil.parseToken(accessToken);
         log.info("parse result : {}", user_id);
 
+        AuthGetKakaoTokenDTO dto = new AuthGetKakaoTokenDTO();
+    User user = new User();
         if(user_id == null){ //카카오에서 에러 래요
             log.error("유효하지 않은 토큰");
             throw new BadVariableRequestException("유효 하지 않은 토큰입니다.");
-//            responseDto.setStatus_code(400);
-//            responseDto.setMessage("토큰 파싱과정에서 오류");
-//            return responseDto;
+
         }
         else{ //DB에 회원정보있어? 없으면 insert하고 리턴
             String url2 = "https://kapi.kakao.com/v1/oidc/userinfo";
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-            headers.setBearerAuth(access_Token);
+            headers.setBearerAuth(accessToken);
 
             MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
 
@@ -133,7 +190,8 @@ public class AuthService {
             OpenIdResponseDto openIdResponseDto = response.getBody();
             String picture = openIdResponseDto.getPicture();
             picture = picture.replace("http", "https");
-            User user = User.builder()
+
+            user = User.builder()
                     .userId(openIdResponseDto.getSub())
                     .userEmail(openIdResponseDto.getEmail())
                     .userImage(picture)
@@ -142,91 +200,35 @@ public class AuthService {
             Optional<User> byId = userRepository.findById(user_id);
 
             userRepository.save(user);
+            String token = jwtTokenProvider.createAccessToken(accessToken, user.getUserId());
+            Optional<User> returnUser = userRepository.findById(user.getUserId());
+
+
+            Token tokenDto = new Token();
+            tokenDto.setTokenValue(accessToken);
+            tokenDto.setUser(returnUser.get());
+
+            tokenRepsository.save(tokenDto);
+            dto.setAccessToken(token);
         }
-        AuthGetKakaoTokenDTO dto = new AuthGetKakaoTokenDTO();
+
+        dto.setUserId(user.getUserId());
+        dto.setUserEmail(user.getUserEmail());
+        dto.setUserName(user.getUserName());
+        dto.setUserImage(user.getUserImage());
+
         ResponseSuccessDTO<AuthGetKakaoTokenDTO> res = responseUtil.successResponse(dto,HttpStatus.OK);
-        dto.setAccessToken(access_Token);
-
-//        responseDto.setMessage("로그인 성공, 토큰 리턴");
-//        responseDto.setStatus_code(200);
         return res;
     }
+    public ResponseSuccessDTO<String> validateToken(String jwtToken){
+       boolean result=  jwtTokenProvider.validateToken(jwtToken);
+       String str="";
+       if(result){
+           str = "유효한 토큰입니다.";
+       }
 
-    public ResponseSuccessDTO<AuthUserIdResponseDTO> getUserId(String accessToken) {
-        //ResponseDto responseDto = new ResponseDto<>();
-        //HashMap<String, Object> resultMap = new HashMap<>();
-
-        String userId = httpUtil.parseToken(accessToken);
-
-        if(userId == null){
-            throw new EntityNullException("User ID가 NULL 입니다.");
-        }
-        AuthUserIdResponseDTO dto = new AuthUserIdResponseDTO();
-        dto.setUserId(userId);
-//        resultMap.put("user_id",userId);
-//        responseDto.setData(resultMap);
-//        responseDto.setMessage("토큰 검증 성공");
-//        responseDto.setStatus_code(200);
-        ResponseSuccessDTO<AuthUserIdResponseDTO> res = responseUtil.successResponse(dto,HttpStatus.OK);
-        return res;
+       ResponseSuccessDTO<String> res = responseUtil.successResponse(str,HttpStatus.OK);
+       return res;
     }
 
-    public ResponseSuccessDTO<AuthUserInfoResponseDTO> getUserInfo(String accessToken) {
-
-
-        String userId = httpUtil.parseToken(accessToken);
-        if(userId == null){
-            throw new EntityNullException("유저 아이디가 NULL 입니다. 토큰 만료됨");
-//            responseDto.setData(null);
-//            responseDto.setMessage("토큰 만료");
-//            responseDto.setStatus_code(450);
-//            return responseDto;
-        }
-        Optional<User> byId = userRepository.findById(userId);
-        User user = byId.get();
-        AuthUserInfoResponseDTO userInfoDto = AuthUserInfoResponseDTO.builder()
-                .userId(user.getUserId())
-                .userName(user.getUserName())
-                .userImg(user.getUserImage())
-                .build();
-
-        ResponseSuccessDTO<AuthUserInfoResponseDTO> res = responseUtil.successResponse(userInfoDto,HttpStatus.OK);
-        return res;
-    }
-
-    @Transactional
-    public ResponseSuccessDTO<String> getJwtToken(String accessToken, AuthGetRequestTokenDTO userInfo){
-        if(accessToken==null){
-            throw new EntityNullException("access_token이 NULL 입니다");
-
-        }
-        String userId = userInfo.getUserId();
-//        User user = User.builder()
-//                .userId(userInfo.getUserId())
-//                .userName(userInfo.getUserName())
-//                .userEmail(userInfo.getUserEmail())
-//                .userImage(userInfo.getUserImage())
-//                .build();
-        User user = new User();
-        user.setUserId(userInfo.getUserId());
-        user.setUserName(userInfo.getUserName());
-        user.setUserEmail(userInfo.getUserEmail());
-        user.setUserImage(userInfo.getUserImage());
-
-        String token = jwtTokenProvider.createAccessToken(accessToken, userId);
-        userRepository.save(user);
-        Optional<User> returnUser = userRepository.findById(userId);
-
-
-        Token tokenDto = new Token();
-        tokenDto.setTokenValue(token);
-        tokenDto.setUser(returnUser.get());
-//        tokenDto.builder()
-//                .tokenValue(token)
-//                .user(user)
-//                .build();
-        tokenRepsository.save(tokenDto);
-        ResponseSuccessDTO<String> res = responseUtil.successResponse(token,HttpStatus.OK);
-        return res;
-    }
 }
