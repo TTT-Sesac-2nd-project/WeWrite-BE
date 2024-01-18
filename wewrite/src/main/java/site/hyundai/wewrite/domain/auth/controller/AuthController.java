@@ -38,10 +38,10 @@ public class AuthController {
 
     @PostMapping("/issue-token")
     public ResponseEntity<ResponseSuccessDTO<AuthGetKakaoTokenDTO>> getJwtToken(@RequestHeader HttpHeaders headers){
-        String access_token = headers.get("access_token").toString();
+        String access_token = headers.get("access-token").toString();
         access_token= access_token.replace("[","");
         access_token= access_token.replace("]","");
-        log.info("유저 정보 요청 POST: /user/issue-token, access_token : {}",access_token);
+        log.info("유저 정보 요청 POST: /user/issue-token, access-token : {}",access_token);
 
         return ResponseEntity.ok(authService.getJwtToken(access_token));
     }
