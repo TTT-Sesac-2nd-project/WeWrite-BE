@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.hyundai.wewrite.domain.auth.dto.AuthGetKakaoTokenDTO;
+import site.hyundai.wewrite.domain.auth.dto.AuthGetRequestTokenDTO;
 import site.hyundai.wewrite.domain.auth.dto.AuthUserIdResponseDTO;
 import site.hyundai.wewrite.global.dto.ResponseSuccessDTO;
 import site.hyundai.wewrite.domain.auth.service.AuthService;
@@ -52,6 +53,15 @@ public class AuthController {
         log.info("유저 정보 요청 GET: /member/info, access_token : {}",access_token);
 
         return ResponseEntity.ok(authService.getUserInfo(access_token));
+    }
+
+    @PostMapping("/issue-token")
+    public ResponseEntity<ResponseSuccessDTO> getJwtToken(@RequestHeader HttpHeaders headers, @RequestBody AuthGetRequestTokenDTO userInfo){
+        String access_token = headers.get("access_token").toString();
+
+        log.info("유저 정보 요청 POST: /user/issue-token, access_token : {}",access_token);
+
+        return ResponseEntity.ok(authService.getJwtToken(access_token,userInfo));
     }
 }
 

@@ -2,6 +2,7 @@ package site.hyundai.wewrite.domain.auth.service;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import io.netty.buffer.search.MultiSearchProcessorFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,17 +12,17 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import site.hyundai.wewrite.domain.auth.dto.AuthGetKakaoTokenDTO;
-import site.hyundai.wewrite.domain.auth.dto.AuthUserIdResponseDTO;
-import site.hyundai.wewrite.domain.auth.dto.AuthUserInfoResponseDTO;
-import site.hyundai.wewrite.domain.auth.dto.OpenIdResponseDto;
+import site.hyundai.wewrite.domain.auth.dto.*;
+import site.hyundai.wewrite.domain.auth.entity.Token;
 import site.hyundai.wewrite.domain.auth.entity.User;
+import site.hyundai.wewrite.domain.auth.repository.TokenRepsository;
 import site.hyundai.wewrite.domain.auth.repository.UserRepository;
 import site.hyundai.wewrite.domain.auth.util.HttpUtil;
 import site.hyundai.wewrite.global.dto.ResponseSuccessDTO;
 import site.hyundai.wewrite.global.exeception.service.BadVariableRequestException;
 import site.hyundai.wewrite.global.exeception.service.EntityNullException;
 import site.hyundai.wewrite.global.exeception.service.NotAuthorizedUserException;
+import site.hyundai.wewrite.global.util.JwtTokenProvider;
 import site.hyundai.wewrite.global.util.ResponseUtil;
 
 import java.io.*;
@@ -42,7 +43,9 @@ public class AuthService {
 
     private final HttpUtil httpUtil;
     private final UserRepository userRepository;
+    private final TokenRepsository tokenRepsository;
     private final ResponseUtil responseUtil;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
     public ResponseSuccessDTO<AuthGetKakaoTokenDTO> getTokenAndUserInfo(String authorization_code, String redirect_base) throws IOException {
@@ -188,6 +191,42 @@ public class AuthService {
                 .build();
 
         ResponseSuccessDTO<AuthUserInfoResponseDTO> res = responseUtil.successResponse(userInfoDto,HttpStatus.OK);
+        return res;
+    }
+
+    @Transactional
+    public ResponseSuccessDTO<String> getJwtToken(String accessToken, AuthGetRequestTokenDTO userInfo){
+        if(accessToken==null){
+            throw new EntityNullException("access_token이 NULL 입니다");
+
+        }
+        String userId = userInfo.getUserId();
+//        User user = User.builder()
+//                .userId(userInfo.getUserId())
+//                .userName(userInfo.getUserName())
+//                .userEmail(userInfo.getUserEmail())
+//                .userImage(userInfo.getUserImage())
+//                .build();
+        User user = new User();
+        user.setUserId(userInfo.getUserId());
+        user.setUserName(userInfo.getUserName());
+        user.setUserEmail(userInfo.getUserEmail());
+        user.setUserImage(userInfo.getUserImage());
+
+        String token = jwtTokenProvider.createAccessToken(accessToken, userId);
+        userRepository.save(user);
+        Optional<User> returnUser = userRepository.findById(userId);
+
+
+        Token tokenDto = new Token();
+        tokenDto.setTokenValue(token);
+        tokenDto.setUser(returnUser.get());
+//        tokenDto.builder()
+//                .tokenValue(token)
+//                .user(user)
+//                .build();
+        tokenRepsository.save(tokenDto);
+        ResponseSuccessDTO<String> res = responseUtil.successResponse(token,HttpStatus.OK);
         return res;
     }
 }

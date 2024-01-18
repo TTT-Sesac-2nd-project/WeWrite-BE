@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Entity
 @Builder
 @AllArgsConstructor
@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 public class User {
 
     @Id
-    @Column(length = 2000, unique = true)
+    @Column(length = 2000, unique = true, name = "user_id")
     @NotNull
     @Size(max = 2000)
     private String userId;
@@ -26,7 +26,7 @@ public class User {
     @Size(max = 100)
     private String userName;
 
-    @Column(length = 2000, unique = true)
+    @Column(length = 2000)
     @NotNull
     @Size(max = 2000)
     private String userEmail;
