@@ -1,8 +1,5 @@
 package site.hyundai.wewrite.domain.auth.service;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import io.netty.buffer.search.MultiSearchProcessorFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,23 +10,17 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import site.hyundai.wewrite.domain.auth.dto.*;
-import site.hyundai.wewrite.domain.auth.entity.Token;
-import site.hyundai.wewrite.domain.auth.entity.User;
+import site.hyundai.wewrite.domain.entity.Token;
+import site.hyundai.wewrite.domain.entity.User;
 import site.hyundai.wewrite.domain.auth.repository.TokenRepsository;
 import site.hyundai.wewrite.domain.auth.repository.UserRepository;
 import site.hyundai.wewrite.domain.auth.util.HttpUtil;
 import site.hyundai.wewrite.global.dto.ResponseSuccessDTO;
 import site.hyundai.wewrite.global.exeception.service.BadVariableRequestException;
 import site.hyundai.wewrite.global.exeception.service.EntityNullException;
-import site.hyundai.wewrite.global.exeception.service.NotAuthorizedUserException;
 import site.hyundai.wewrite.global.util.JwtTokenProvider;
 import site.hyundai.wewrite.global.util.ResponseUtil;
 
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Optional;
 
 @Service
