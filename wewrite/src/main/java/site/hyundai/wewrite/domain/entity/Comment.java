@@ -9,14 +9,14 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@Entity
-@Builder
-@AllArgsConstructor
-@Table(name = "TBL_COMMENT")
-public class Comment {
-
-
-}
+//@Getter
+//@Setter
+//@NoArgsConstructor
+//@Entity
+//@Builder
+//@AllArgsConstructor
+//@Table(name = "TBL_COMMENT")
+//public class Comment {
+//
+//
+//}
