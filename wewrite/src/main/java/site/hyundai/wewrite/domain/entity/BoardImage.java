@@ -12,16 +12,16 @@ import javax.persistence.*;
 @Table(name = "TBL_BOARD_IMAGE")
 public class BoardImage {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bookmark_seq_generator")
-    @SequenceGenerator(name = "bookmark_seq_generator", sequenceName = "TBL_BOOKMARK_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "board_image_seq_generator")
+    @SequenceGenerator(name = "board_image_seq_generator", sequenceName = "TBL_BOARD_IMAGE_SEQ", allocationSize = 1)
     @Column(name = "board_image_id")
     private Long boardImageId;
 
-    @ManyToOne
+    @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
 
-    @ManyToOne
+    @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name = "image_id", nullable = false)
     private Image image;
 }

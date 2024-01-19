@@ -17,8 +17,12 @@ public class Image {
     @SequenceGenerator(name = "image_seq_generator", sequenceName = "TBL_IMAGE_SEQ", allocationSize = 1)
     @Column(name = "image_id")
     private Long imageId;
+    @Column(length = 2000)
     private String originalFileName;
+    @Column(length = 2000)
     private String uploadFileName;
+    @Column(length = 2000)
     private String uploadFilePath;
+    @Column(length = 2000)
     private String uploadFileUrl;
 }

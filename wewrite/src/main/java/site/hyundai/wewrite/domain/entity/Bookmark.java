@@ -3,7 +3,6 @@ package site.hyundai.wewrite.domain.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -19,11 +18,11 @@ public class Bookmark {
     @Column(length = 2000, name = "bookmark_id")
     private Long bookmarkId;
 
-    @ManyToOne
+    @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
 }

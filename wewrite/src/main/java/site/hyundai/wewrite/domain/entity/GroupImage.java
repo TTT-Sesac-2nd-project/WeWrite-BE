@@ -17,11 +17,11 @@ public class GroupImage {
     @Column(length = 2000, name = "group_image_id")
     private Long groupImageId;
 
-    @ManyToOne
+    @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name = "image_id")
     private Image image;
 
-    @ManyToOne
+    @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name = "group_id")
     private Group group;
 

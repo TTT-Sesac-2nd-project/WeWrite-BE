@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @AllArgsConstructor
 @Table(name = "TBL_MISSION")
-public class Mission {
+public class Mission extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mission_seq_generator")
     @SequenceGenerator(name = "mission_seq_generator", sequenceName = "TBL_MISSION_SEQ", allocationSize = 1)

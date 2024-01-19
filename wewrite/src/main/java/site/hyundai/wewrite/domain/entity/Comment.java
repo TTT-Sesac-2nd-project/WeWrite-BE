@@ -3,8 +3,7 @@ package site.hyundai.wewrite.domain.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,11 +22,11 @@ public class Comment extends Timestamped{
     @Column(nullable = false)
     private String commentContent;
 
-    @ManyToOne
+    @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
 

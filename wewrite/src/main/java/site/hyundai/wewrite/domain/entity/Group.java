@@ -5,7 +5,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -14,7 +13,7 @@ import javax.validation.constraints.Size;
 @Builder
 @AllArgsConstructor
 @Table(name = "TBL_GROUP")
-public class Group {
+public class Group extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "group_seq_generator")
@@ -22,7 +21,7 @@ public class Group {
     @Column(name = "group_id")
     private Long groupId;
 
-    @Column(length = 100)
+    @Column(length = 2000)
     @NotNull
     private String groupName;
 

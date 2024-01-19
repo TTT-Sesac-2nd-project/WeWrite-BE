@@ -15,18 +15,13 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @Table(name = "TBL_BOARD")
-public class Board {
+public class Board extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "board_seq_generator")
     @SequenceGenerator(name = "board_seq_generator", sequenceName = "TBL_BOARD_SEQ", allocationSize = 1)
     @Column(name = "board_id")
     private Long boardId;
 
-
-//    @NotNull
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "project_no")
-//    private Project project;
     @NotNull
     @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name="user_id")
@@ -54,13 +49,11 @@ public class Board {
     @Size(max = 2000)
     private LocalDateTime boardCreatedDate;
 
-
     @Column(name = "board_view")
     @NotNull
     @Size(max = 2000)
     @ColumnDefault("0")
     private Long boardView;
-
 
     @Column(name = "board_lat")
     @NotNull
