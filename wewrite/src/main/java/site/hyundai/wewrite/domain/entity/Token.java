@@ -1,4 +1,4 @@
-package site.hyundai.wewrite.domain.auth.entity;
+package site.hyundai.wewrite.domain.entity;
 
 import lombok.*;
 
