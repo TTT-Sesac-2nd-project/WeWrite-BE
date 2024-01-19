@@ -2,6 +2,7 @@ package site.hyundai.wewrite.domain.entity;
 
 
 import lombok.*;
+import site.hyundai.wewrite.domain.group.dto.request.GroupRequestDTO;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -29,4 +30,8 @@ public class Group extends Timestamped {
     @NotNull
     private String groupCode;
 
+    public Group(String groupName, String groupCode) {
+        this.groupName = groupName;
+        this.groupCode = groupCode;
+    }
 }
