@@ -54,6 +54,7 @@ public class AuthController {
 
         jwtToken= jwtToken.replace("[","");
         jwtToken= jwtToken.replace("]","");
+        
         return ResponseEntity.ok(authService.validateToken(jwtToken));
     }
 }

@@ -2,6 +2,8 @@ package site.hyundai.wewrite.domain.auth.service;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,6 +40,8 @@ public class AuthService {
 
     @Value("${wewrite.kakao-client-id}")
     private String client_id;
+    @Value("${security.jwt.secret-key}")
+    private String secretKey;
 
     private final HttpUtil httpUtil;
     private final UserRepository userRepository;
@@ -227,6 +231,23 @@ public class AuthService {
 
        ResponseSuccessDTO<String> res = responseUtil.successResponse(str,HttpStatus.OK);
        return res;
+    }
+
+    public String getUserId(String jwtToken){
+        String userId = "";
+        validateToken(jwtToken);
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(secretKey)
+                    .parseClaimsJws(jwtToken)
+                    .getBody();
+
+            return claims.get("userId", String.class);
+        }
+        catch(NullPointerException e){
+            throw new EntityNullException("userId로 토큰을 넣어야합니다.");
+        }
+
     }
 
 }
