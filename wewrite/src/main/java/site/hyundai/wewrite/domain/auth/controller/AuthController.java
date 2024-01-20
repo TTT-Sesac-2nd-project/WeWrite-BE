@@ -9,6 +9,8 @@ import site.hyundai.wewrite.domain.auth.dto.AuthGetKakaoTokenDTO;
 import site.hyundai.wewrite.global.dto.ResponseSuccessDTO;
 import site.hyundai.wewrite.domain.auth.service.AuthService;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/user")
 @Slf4j
@@ -18,22 +20,22 @@ public class AuthController {
     private final AuthService authService;
 
 
-//    @PostMapping("/kakao")
-//    public ResponseEntity<ResponseSuccessDTO<AuthGetKakaoTokenDTO>> getKaKaoToken(@RequestHeader HttpHeaders headers) throws IOException {
-//        log.info(headers.toString());
-//        if(headers.isEmpty()){
-//            log.info("비어있으면 뜹니다.");
-//        }
-//        String authorization_code = headers.get("authorization_code").toString();
-//        String redirect_base = headers.get("redirect_base").toString();
-//        authorization_code = authorization_code.replace("[","");
-//        authorization_code = authorization_code.replace("]","");
-//        redirect_base = redirect_base.replace("[","");
-//        redirect_base = redirect_base.replace("]","");
-//        log.info("인가코드로 토큰 요청 POST: /user/kakao, code : {}, redirect : {}",authorization_code,redirect_base);
-//
-//        return ResponseEntity.ok(authService.getTokenAndUserInfo(authorization_code,redirect_base));
-//    }
+    @PostMapping("/kakao")
+    public ResponseEntity<ResponseSuccessDTO<AuthGetKakaoTokenDTO>> getKaKaoToken(@RequestHeader HttpHeaders headers) throws IOException {
+        log.info(headers.toString());
+        if(headers.isEmpty()){
+            log.info("비어있으면 뜹니다.");
+        }
+        String authorization_code = headers.get("authorization_code").toString();
+        String redirect_base = headers.get("redirect_base").toString();
+        authorization_code = authorization_code.replace("[","");
+        authorization_code = authorization_code.replace("]","");
+        redirect_base = redirect_base.replace("[","");
+        redirect_base = redirect_base.replace("]","");
+        log.info("인가코드로 토큰 요청 POST: /user/kakao, code : {}, redirect : {}",authorization_code,redirect_base);
+
+        return ResponseEntity.ok(authService.getTokenAndUserInfo(authorization_code,redirect_base));
+    }
 
 
     @PostMapping("/issue-token")
