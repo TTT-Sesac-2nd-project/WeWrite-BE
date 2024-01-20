@@ -26,8 +26,8 @@ public class AuthController {
         if(headers.isEmpty()){
             log.info("비어있으면 뜹니다.");
         }
-        String authorization_code = headers.get("authorization_code").toString();
-        String redirect_base = headers.get("redirect_base").toString();
+        String authorization_code = headers.get("authorization-code").toString();
+        String redirect_base = headers.get("redirect-base").toString();
         authorization_code = authorization_code.replace("[","");
         authorization_code = authorization_code.replace("]","");
         redirect_base = redirect_base.replace("[","");
