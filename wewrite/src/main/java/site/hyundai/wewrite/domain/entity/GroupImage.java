@@ -25,4 +25,8 @@ public class GroupImage {
     @JoinColumn(name = "group_id")
     private Group group;
 
+    public GroupImage(Group group, Image image) {
+        this.group = group;
+        this.image = image;
+    }
 }
