@@ -36,6 +36,6 @@ public class Group extends Timestamped {
     public Group(String groupName, String groupCode) {
         this.groupName = groupName;
         this.groupCode = groupCode;
-        this.groupMemberCount = 0L;
+        this.groupMemberCount = 1L;
     }
 }

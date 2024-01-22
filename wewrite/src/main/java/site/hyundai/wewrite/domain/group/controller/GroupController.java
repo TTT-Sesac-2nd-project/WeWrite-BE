@@ -57,6 +57,12 @@ public class GroupController {
         return ResponseEntity.ok(groupService.getMyGroups(getUserService.getUserByToken(headers)));
     }
 
+    // 초대코드로 그룹 가입하기
+    @PostMapping("/join")
+    public ResponseEntity<ResponseSuccessDTO<String>> joinGroup(@RequestParam String groupCode, @RequestHeader HttpHeaders headers) {
+        return ResponseEntity.ok(groupService.joinGroup(groupCode, getUserService.getUserByToken(headers)));
+    }
+
     // 그룹 수정
 
 

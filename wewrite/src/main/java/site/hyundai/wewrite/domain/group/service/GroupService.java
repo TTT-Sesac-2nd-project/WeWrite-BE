@@ -87,6 +87,29 @@ public class GroupService {
         return responseUtil.successResponse(myGroups, HttpStatus.OK);
     }
 
+    // 초대코드로 그룹 가입하기
+    @Transactional
+    public ResponseSuccessDTO<String> joinGroup(String groupCode, User userByToken) {
+        Group group = groupRepository.findByGroupCode(groupCode).orElseThrow(
+                () -> new EntityNullException("해당 그룹이 존재하지 않습니다.")
+        );
+
+        // 이미 가입된 그룹인지 확인
+        userGroupRepository.findByGroupAndUser(group, userByToken).ifPresent(
+                (userGroup) -> {
+                    throw new DefaultException("이미 가입된 그룹입니다.");
+                }
+        );
+
+        // user_group 저장
+        UserGroup userGroup = new UserGroup();
+        userGroup.setUser(userByToken);
+        userGroup.setGroup(group);
+        userGroupRepository.save(userGroup);
+
+        return responseUtil.successResponse("", HttpStatus.OK);
+    }
+
 
     // 초대코드 생성 (8자리)
     public static String generateRandomCode(int length) {
