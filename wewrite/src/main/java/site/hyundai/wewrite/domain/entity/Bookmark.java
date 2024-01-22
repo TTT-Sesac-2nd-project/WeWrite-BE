@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @Table(name = "TBL_BOOKMARK")
-public class Bookmark {
+public class Bookmark extends Timestamped{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bookmark_seq_generator")
     @SequenceGenerator(name = "bookmark_seq_generator", sequenceName = "TBL_BOOKMARK_SEQ", allocationSize = 1)

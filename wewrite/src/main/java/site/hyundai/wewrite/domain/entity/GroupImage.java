@@ -10,7 +10,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "TBL_GROUP_IMAGE")
-public class GroupImage {
+public class GroupImage extends Timestamped{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "group_image_seq_generator")
     @SequenceGenerator(name = "group_image_seq_generator", sequenceName = "TBL_GROUP_IMAGE_SEQ", allocationSize = 1)

@@ -64,10 +64,30 @@ public class GroupController {
     }
 
     // 그룹 수정
+    @PatchMapping("/{groupId}")
+    public ResponseEntity<ResponseSuccessDTO<String>> updateGroup(@PathVariable Long groupId, GroupRequestDTO groupRequestDTO, @RequestHeader HttpHeaders headers) {
+        List<Image> images = null;
+        if(groupRequestDTO.getGroupImage() != null){
+            List<MultipartFile> groupImage = groupRequestDTO.getGroupImage();
+            images = s3UploaderService.uploadFiles("group", groupImage);
+        }
+        Image image = null;
+        if (images != null) {
+            image = images.get(0);
+        }
+        return ResponseEntity.ok(groupService.updateGroup(groupId, groupRequestDTO, image, getUserService.getUserByToken(headers)));
+    }
 
 
     // 그룹 삭제
-
+    @DeleteMapping("/{groupId}")
+    public ResponseEntity<ResponseSuccessDTO<String>> deleteGroup(@PathVariable Long groupId, @RequestHeader HttpHeaders headers) {
+        return ResponseEntity.ok(groupService.deleteGroup(groupId, getUserService.getUserByToken(headers)));
+    }
 
     // 그룹 탈퇴
+    @DeleteMapping("/leave/{groupId}")
+    public ResponseEntity<ResponseSuccessDTO<String>> leaveGroup(@PathVariable Long groupId, @RequestHeader HttpHeaders headers) {
+        return ResponseEntity.ok(groupService.leaveGroup(groupId, getUserService.getUserByToken(headers)));
+    }
 }

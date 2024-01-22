@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @AllArgsConstructor
 @Table(name = "TBL_EMOTION")
-public class Emotion {
+public class Emotion extends Timestamped{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "emotion_seq_generator")
     @SequenceGenerator(name = "emotion_seq_generator", sequenceName = "TBL_EMOTION_SEQ", allocationSize = 1)
