@@ -45,19 +45,15 @@ public class Board extends Timestamped {
     private String boardContent;
 
     @Column(length = 2000,name = "board_created_date")
-    @NotNull
-    @Size(max = 2000)
     private LocalDateTime boardCreatedDate;
 
     @Column(name = "board_view")
-    @NotNull
-    @Size(max = 2000)
     @ColumnDefault("0")
+    @NotNull
     private Long boardView;
 
     @Column(name = "board_lat")
     @NotNull
-    @Size(max = 2000)
     private String boardLat;
 
     @Column(name = "board_long")

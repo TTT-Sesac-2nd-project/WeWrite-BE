@@ -27,7 +27,7 @@ public class Token {
 
     @Column(length = 2000)
     @NotNull
-    @Size(max = 2000)
+
     private String tokenValue;
 
 }
