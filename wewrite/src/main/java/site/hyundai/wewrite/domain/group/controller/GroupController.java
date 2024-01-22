@@ -38,7 +38,7 @@ public class GroupController {
             images = s3UploaderService.uploadFiles("group", groupImage);
         }
         Image image = null;
-        if (!images.isEmpty()) {
+        if (images != null) {
             image = images.get(0);
         }
         return ResponseEntity.ok(groupService.createGroup(groupRequestDTO, image, getUserService.getUserByToken(headers)));
