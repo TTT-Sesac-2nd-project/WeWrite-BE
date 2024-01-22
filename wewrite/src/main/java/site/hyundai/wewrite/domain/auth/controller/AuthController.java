@@ -1,5 +1,6 @@
 package site.hyundai.wewrite.domain.auth.controller;
 
+import io.swagger.annotations.ApiImplicitParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -39,6 +40,7 @@ public class AuthController {
 
 
     @PostMapping("/issue-token")
+    @ApiImplicitParam(name = "token", value = "JWT TOKEN 을 담아주세요", required = true, dataType = "string", paramType = "header")
     public ResponseEntity<ResponseSuccessDTO<AuthGetKakaoTokenDTO>> getJwtToken(@RequestHeader HttpHeaders headers){
         String access_token = headers.get("access-token").toString();
         access_token= access_token.replace("[","");
@@ -49,6 +51,7 @@ public class AuthController {
     }
 
     @PostMapping("/validate-token")
+    @ApiImplicitParam(name = "token", value = "JWT TOKEN 을 담아주세요", required = true, dataType = "string", paramType = "header")
     public ResponseEntity<ResponseSuccessDTO<String>> validateToken(@RequestHeader HttpHeaders headers){
         String jwtToken = headers.get("token").toString();
 
