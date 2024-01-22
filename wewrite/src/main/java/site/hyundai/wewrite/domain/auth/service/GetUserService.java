@@ -20,7 +20,6 @@ public class GetUserService {
     private final AuthService authService;
 
     // token으로 유저 가져오기
-    // todo : exception 수정
     public User getUserByToken(HttpHeaders headers){
         String jwtToken = Objects.requireNonNull(headers.get("token")).toString();
         jwtToken= jwtToken.replace("[","");

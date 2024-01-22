@@ -10,15 +10,17 @@ import site.hyundai.wewrite.domain.entity.Group;
 @Getter
 public class GroupResponseDTO {
     // 그룹 이미지, 그룹 이름, 그룹 코드
-    private Long groupId;
-    private String groupName;
-    private String groupCode;
-    private String groupImageUrl;
+    private final Long groupId;
+    private final String groupName;
+    private final String groupCode;
+    private final String groupImageUrl;
+    private final Long groupMemberCount;
 
     public GroupResponseDTO(Group group, String groupImageUrl) {
         this.groupId = group.getGroupId();
         this.groupName = group.getGroupName();
         this.groupCode = group.getGroupCode();
+        this.groupMemberCount = group.getGroupMemberCount();
         this.groupImageUrl = groupImageUrl;
     }
 }
