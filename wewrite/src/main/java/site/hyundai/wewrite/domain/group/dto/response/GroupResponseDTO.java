@@ -13,10 +13,12 @@ public class GroupResponseDTO {
     private Long groupId;
     private String groupName;
     private String groupCode;
+    private String groupImageUrl;
 
-    public GroupResponseDTO(Group group) {
+    public GroupResponseDTO(Group group, String groupImageUrl) {
         this.groupId = group.getGroupId();
         this.groupName = group.getGroupName();
         this.groupCode = group.getGroupCode();
+        this.groupImageUrl = groupImageUrl;
     }
 }

@@ -14,6 +14,7 @@ import site.hyundai.wewrite.domain.group.repository.GroupRepository;
 import site.hyundai.wewrite.domain.group.repository.UserGroupRepository;
 import site.hyundai.wewrite.global.dto.ResponseSuccessDTO;
 import site.hyundai.wewrite.global.exeception.service.DefaultException;
+import site.hyundai.wewrite.global.exeception.service.EntityNullException;
 import site.hyundai.wewrite.global.exeception.service.UnAuthorizedException;
 import site.hyundai.wewrite.global.util.ResponseUtil;
 
@@ -59,7 +60,7 @@ public class GroupService {
     // 그룹 페이지 조회
     @Transactional
     public ResponseSuccessDTO<GroupDetailResponseDTO> getDetailGroup(Long groupId, User user) {
-        Group group = groupRepository.findById(groupId).orElseThrow(() -> new DefaultException("해당 그룹이 없습니다. id=" + groupId));
+        Group group = groupRepository.findById(groupId).orElseThrow(() -> new EntityNullException("해당 그룹이 없습니다. id=" + groupId));
         checkRole(group, user);
         GroupDetailResponseDTO groupDetailResponseDTO = new GroupDetailResponseDTO(group);
         return responseUtil.successResponse(groupDetailResponseDTO, HttpStatus.OK);
@@ -72,11 +73,17 @@ public class GroupService {
 
         List<GroupResponseDTO> myGroups = new ArrayList<>();
         for(UserGroup userGroup : userGroups) {
-            Group group = groupRepository.findById(userGroup.getGroup().getGroupId()).orElseThrow(() -> new IllegalArgumentException("해당 그룹이 존재하지 않습니다."));
-            myGroups.add(new GroupResponseDTO(group));
+            Group group = groupRepository.findById(userGroup.getGroup().getGroupId())
+                    .orElseThrow(() -> new EntityNullException("해당 그룹이 존재하지 않습니다."));
+
+            // groupImage
+            GroupImage groupImage = groupImageRepository.findByGroup(group).orElse(null);
+            String groupImageUrl = (groupImage != null) ? groupImage.getImage().getUploadFileUrl() : null;
+            myGroups.add(new GroupResponseDTO(group, groupImageUrl));
         }
         return responseUtil.successResponse(myGroups, HttpStatus.OK);
     }
+
 
     // 초대코드 생성 (8자리)
     public static String generateRandomCode(int length) {
