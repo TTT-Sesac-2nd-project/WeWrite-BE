@@ -54,7 +54,7 @@ public class GroupService {
             groupImageRepository.save(new GroupImage(group, image));
         }
 
-        return responseUtil.successResponse("", HttpStatus.OK);
+        return responseUtil.successResponse("그룹 생성 완료", HttpStatus.OK);
     }
 
     // 그룹 페이지 조회
@@ -109,7 +109,7 @@ public class GroupService {
 
         group.updateGroupMemberCount(group.getGroupMemberCount() + 1);
 
-        return responseUtil.successResponse("", HttpStatus.OK);
+        return responseUtil.successResponse("초대코드로 그룹 가입하기", HttpStatus.OK);
     }
 
     // 그룹 수정
@@ -128,7 +128,7 @@ public class GroupService {
             groupImageRepository.save(new GroupImage(group, image));
         }
 
-        return responseUtil.successResponse("", HttpStatus.OK);
+        return responseUtil.successResponse("그룹 수정 성공", HttpStatus.OK);
     }
 
     // 그룹 삭제
@@ -142,7 +142,7 @@ public class GroupService {
         // group 삭제
         groupRepository.deleteById(groupId);
 
-        return responseUtil.successResponse("", HttpStatus.OK);
+        return responseUtil.successResponse("그룹 삭제 성공", HttpStatus.OK);
     }
 
     @Transactional
@@ -155,7 +155,7 @@ public class GroupService {
         // group 삭제
         group.updateGroupMemberCount(group.getGroupMemberCount() - 1);
 
-        return responseUtil.successResponse("", HttpStatus.OK);
+        return responseUtil.successResponse("그룹 탈퇴 성공", HttpStatus.OK);
     }
 
 

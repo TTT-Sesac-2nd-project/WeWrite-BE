@@ -34,4 +34,15 @@ public class Emotion extends Timestamped{
     @Column(length = 2000,name = "emotion_type")
     @Enumerated(EnumType.STRING)
     private EmotionStatus emotionType;
+
+    public Emotion setType(EmotionStatus emotionType) {
+        this.emotionType = emotionType;
+        return this;
+    }
+
+    public Emotion(Board board, User user, EmotionStatus emotionType) {
+        this.board = board;
+        this.user = user;
+        this.emotionType = emotionType;
+    }
 }
