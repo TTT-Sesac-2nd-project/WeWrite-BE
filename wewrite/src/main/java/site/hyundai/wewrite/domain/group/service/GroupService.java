@@ -62,7 +62,10 @@ public class GroupService {
     public ResponseSuccessDTO<GroupDetailResponseDTO> getDetailGroup(Long groupId, User user) {
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new EntityNullException("해당 그룹이 없습니다. id=" + groupId));
         checkRole(group, user);
-        GroupDetailResponseDTO groupDetailResponseDTO = new GroupDetailResponseDTO(group);
+        // groupImage
+        GroupImage groupImage = groupImageRepository.findByGroup(group).orElse(null);
+        String groupImageUrl = (groupImage != null) ? groupImage.getImage().getUploadFileUrl() : null;
+        GroupDetailResponseDTO groupDetailResponseDTO = new GroupDetailResponseDTO(group, groupImageUrl);
         return responseUtil.successResponse(groupDetailResponseDTO, HttpStatus.OK);
     }
 
