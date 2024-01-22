@@ -16,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import site.hyundai.wewrite.domain.auth.dto.*;
 import site.hyundai.wewrite.domain.entity.Token;
 import site.hyundai.wewrite.domain.entity.User;
-import site.hyundai.wewrite.domain.auth.repository.TokenRepsository;
+import site.hyundai.wewrite.domain.auth.repository.TokenRepository;
 import site.hyundai.wewrite.domain.auth.repository.UserRepository;
 import site.hyundai.wewrite.domain.auth.util.HttpUtil;
 import site.hyundai.wewrite.global.dto.ResponseSuccessDTO;
@@ -45,7 +45,7 @@ public class AuthService {
 
     private final HttpUtil httpUtil;
     private final UserRepository userRepository;
-    private final TokenRepsository tokenRepsository;
+    private final TokenRepository tokenRepsository;
     private final ResponseUtil responseUtil;
     private final JwtTokenProvider jwtTokenProvider;
 

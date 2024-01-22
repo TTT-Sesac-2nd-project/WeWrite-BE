@@ -2,6 +2,8 @@ package site.hyundai.wewrite.domain.entity;
 
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -15,6 +17,8 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @Table(name = "TBL_BOARD")
+@Where(clause = "deleted_at IS NULL")
+@SQLDelete(sql = "UPDATE TBL_BOARD SET deleted_at = FROM_TZ(CAST(SYSTIMESTAMP AS TIMESTAMP), 'UTC') AT TIME ZONE 'Asia/Seoul' WHERE board_id = ?")
 public class Board extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "board_seq_generator")

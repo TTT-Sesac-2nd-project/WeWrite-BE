@@ -1,6 +1,8 @@
 package site.hyundai.wewrite.domain.entity;
 
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
@@ -11,6 +13,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @ToString
 @Table(name = "TBL_IMAGE")
+
 public class Image extends Timestamped{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "image_seq_generator")

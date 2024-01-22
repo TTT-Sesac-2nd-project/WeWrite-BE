@@ -9,6 +9,8 @@ import site.hyundai.wewrite.domain.entity.QBoard;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import java.util.List;
+
 import static site.hyundai.wewrite.domain.entity.QBoard.board;
 
 public class BoardRepositoryImpl extends QuerydslRepositorySupport implements BoardRepositoryCustom {
@@ -27,4 +29,12 @@ public class BoardRepositoryImpl extends QuerydslRepositorySupport implements Bo
     QBoard qBoard = board;
 
 
+    @Override
+    public List<Board> getBoardList(Long groupId) {
+        return queryFactory.select(board)
+                .from(board)
+                .where(board.group.groupId.eq(groupId))
+                .orderBy(board.createdAt.desc())
+                .fetch();
+    }
 }

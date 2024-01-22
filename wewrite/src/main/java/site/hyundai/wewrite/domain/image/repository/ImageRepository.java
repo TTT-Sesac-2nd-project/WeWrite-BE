@@ -6,5 +6,5 @@ import site.hyundai.wewrite.domain.entity.Image;
 /**
  * @author 이소민
  */
-public interface ImageRepository extends JpaRepository<Image, Long> {
+public interface ImageRepository extends JpaRepository<Image, Long> , ImageRepositoryCustom{
 }

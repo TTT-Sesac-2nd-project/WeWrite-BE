@@ -1,6 +1,10 @@
 package site.hyundai.wewrite.domain.board.repository;
 
-public interface BoardRepositoryCustom {
+import site.hyundai.wewrite.domain.entity.Board;
 
+import java.util.List;
+
+public interface BoardRepositoryCustom {
+List<Board> getBoardList(Long groupId);
 
 }
