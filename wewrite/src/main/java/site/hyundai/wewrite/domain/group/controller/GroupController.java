@@ -45,19 +45,23 @@ public class GroupController {
     }
 
     // 그룹 페이지 조회
-    // todo: 이미지 기능 추가
+    // todo: 글 불러오기
     @GetMapping("/{groupId}")
     public ResponseEntity<ResponseSuccessDTO<GroupDetailResponseDTO>> getDetailGroup(@PathVariable Long groupId, @RequestHeader HttpHeaders headers) {
         return ResponseEntity.ok(groupService.getDetailGroup(groupId, getUserService.getUserByToken(headers)));
     }
 
     // 내 그룹 조회
-    // todo: 이미지 기능 추가
     @GetMapping()
     public ResponseEntity<ResponseSuccessDTO<List<GroupResponseDTO>>> getGroups(@RequestHeader HttpHeaders headers) {
         return ResponseEntity.ok(groupService.getMyGroups(getUserService.getUserByToken(headers)));
     }
 
+    // 초대코드로 그룹 가입하기
+    @PostMapping("/join")
+    public ResponseEntity<ResponseSuccessDTO<String>> joinGroup(@RequestParam String groupCode, @RequestHeader HttpHeaders headers) {
+        return ResponseEntity.ok(groupService.joinGroup(groupCode, getUserService.getUserByToken(headers)));
+    }
 
     // 그룹 수정
 

@@ -30,8 +30,12 @@ public class Group extends Timestamped {
     @NotNull
     private String groupCode;
 
+    @Column(nullable = false)
+    private Long groupMemberCount;
+
     public Group(String groupName, String groupCode) {
         this.groupName = groupName;
         this.groupCode = groupCode;
+        this.groupMemberCount = 1L;
     }
 }
