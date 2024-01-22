@@ -2,6 +2,8 @@ package site.hyundai.wewrite.domain.entity;
 
 
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import site.hyundai.wewrite.domain.group.dto.request.GroupRequestDTO;
 
 import javax.persistence.*;
@@ -13,6 +15,8 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Builder
 @AllArgsConstructor
+@Where(clause = "deleted_at IS NULL")
+@SQLDelete(sql = "UPDATE TBL_GROUP SET deleted_at = FROM_TZ(CAST(SYSTIMESTAMP AS TIMESTAMP), 'UTC') AT TIME ZONE 'Asia/Seoul' WHERE group_id = ?")
 @Table(name = "TBL_GROUP")
 public class Group extends Timestamped {
 
@@ -37,5 +41,9 @@ public class Group extends Timestamped {
         this.groupName = groupName;
         this.groupCode = groupCode;
         this.groupMemberCount = 1L;
+    }
+
+    public void updateGroupMemberCount(long l) {
+        this.groupMemberCount = l;
     }
 }

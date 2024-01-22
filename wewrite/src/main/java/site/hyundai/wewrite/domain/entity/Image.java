@@ -11,7 +11,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @ToString
 @Table(name = "TBL_IMAGE")
-public class Image {
+public class Image extends Timestamped{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "image_seq_generator")
     @SequenceGenerator(name = "image_seq_generator", sequenceName = "TBL_IMAGE_SEQ", allocationSize = 1)

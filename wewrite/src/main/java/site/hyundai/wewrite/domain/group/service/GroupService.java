@@ -89,13 +89,13 @@ public class GroupService {
 
     // 초대코드로 그룹 가입하기
     @Transactional
-    public ResponseSuccessDTO<String> joinGroup(String groupCode, User userByToken) {
+    public ResponseSuccessDTO<String> joinGroup(String groupCode, User user) {
         Group group = groupRepository.findByGroupCode(groupCode).orElseThrow(
                 () -> new EntityNullException("해당 그룹이 존재하지 않습니다.")
         );
 
         // 이미 가입된 그룹인지 확인
-        userGroupRepository.findByGroupAndUser(group, userByToken).ifPresent(
+        userGroupRepository.findByGroupAndUser(group, user).ifPresent(
                 (userGroup) -> {
                     throw new DefaultException("이미 가입된 그룹입니다.");
                 }
@@ -103,9 +103,57 @@ public class GroupService {
 
         // user_group 저장
         UserGroup userGroup = new UserGroup();
-        userGroup.setUser(userByToken);
+        userGroup.setUser(user);
         userGroup.setGroup(group);
         userGroupRepository.save(userGroup);
+
+        group.updateGroupMemberCount(group.getGroupMemberCount() + 1);
+
+        return responseUtil.successResponse("", HttpStatus.OK);
+    }
+
+    // 그룹 수정
+    public ResponseSuccessDTO<String> updateGroup(Long groupId, GroupRequestDTO groupRequestDTO, Image image, User user) {
+        Group group = groupRepository.findById(groupId).orElseThrow(() -> new EntityNullException("해당 그룹이 없습니다. id=" + groupId));
+        checkRole(group, user);
+
+        // group 저장
+        if(groupRequestDTO.getGroupName() != null){
+            group.setGroupName(groupRequestDTO.getGroupName());
+            groupRepository.save(group);
+        }
+
+        // group_image 저장
+        if(image != null){
+            groupImageRepository.save(new GroupImage(group, image));
+        }
+
+        return responseUtil.successResponse("", HttpStatus.OK);
+    }
+
+    // 그룹 삭제
+    @Transactional
+    public ResponseSuccessDTO<String> deleteGroup(Long groupId, User user) {
+        Group group = groupRepository.findById(groupId).orElseThrow(() -> new EntityNullException("해당 그룹이 없습니다. id=" + groupId));
+        checkRole(group, user);
+
+        // user_group 삭제
+        userGroupRepository.deleteByGroup(group);
+        // group 삭제
+        groupRepository.deleteById(groupId);
+
+        return responseUtil.successResponse("", HttpStatus.OK);
+    }
+
+    @Transactional
+    public ResponseSuccessDTO<String> leaveGroup(Long groupId, User user) {
+        Group group = groupRepository.findById(groupId).orElseThrow(() -> new EntityNullException("해당 그룹이 없습니다. id=" + groupId));
+        checkRole(group, user);
+
+        // user_group 삭제
+        userGroupRepository.deleteByGroupAndUser(group, user);
+        // group 삭제
+        group.updateGroupMemberCount(group.getGroupMemberCount() - 1);
 
         return responseUtil.successResponse("", HttpStatus.OK);
     }
