@@ -12,11 +12,15 @@ import site.hyundai.wewrite.domain.auth.dto.AuthGetKakaoTokenDTO;
 import site.hyundai.wewrite.domain.auth.service.AuthService;
 import site.hyundai.wewrite.domain.board.dto.BoardDTO;
 import site.hyundai.wewrite.domain.board.dto.BoardListDTO;
+import site.hyundai.wewrite.domain.board.dto.CommentDTO;
 import site.hyundai.wewrite.domain.board.dto.request.BoardModifyRequestDTO;
 import site.hyundai.wewrite.domain.board.dto.request.BoardPostRequestDTO;
+import site.hyundai.wewrite.domain.board.dto.request.CommentPostRequestDTO;
 import site.hyundai.wewrite.domain.board.dto.response.BoardListGetResponseDTO;
 import site.hyundai.wewrite.domain.board.dto.response.BoardPostResponseDTO;
+import site.hyundai.wewrite.domain.board.dto.response.CommentGetListResponseDTO;
 import site.hyundai.wewrite.domain.board.service.BoardService;
+import site.hyundai.wewrite.domain.board.service.CommentService;
 import site.hyundai.wewrite.global.dto.ResponseSuccessDTO;
 import site.hyundai.wewrite.global.exeception.service.EntityNullException;
 import site.hyundai.wewrite.global.exeception.service.UnAuthorizedException;
@@ -34,7 +38,7 @@ public class BoardController {
 
     private final AuthService authService;
     private final BoardService boardService;
-
+    private final CommentService commentService;
 
     @PostMapping(value = "/", consumes = { MediaType.APPLICATION_JSON_VALUE,
             MediaType.MULTIPART_FORM_DATA_VALUE }, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -102,5 +106,60 @@ public class BoardController {
 
         return ResponseEntity.ok(boardService.deleteBoard(boardId));
     }
+
+    @PostMapping("/{boardId}/comment")
+    @ApiImplicitParam(name = "token", value = "JWT TOKEN 을 담아주세요", required = true, dataType = "string", paramType = "header")
+    public ResponseEntity<ResponseSuccessDTO<String>> addComment(@RequestHeader HttpHeaders headers, @PathVariable(value = "boardId") Long boardId, @RequestBody CommentPostRequestDTO commentDTO){
+        String jwtToken = headers.get("token").toString();
+        if(jwtToken==null){
+            throw new UnAuthorizedException("접근 권한이 없습니다.");
+        }
+        jwtToken= jwtToken.replace("[","");
+        jwtToken= jwtToken.replace("]","");
+        String userId = authService.getUserId(jwtToken); //userId 가져와짐
+        return ResponseEntity.ok(commentService.addComment(userId,boardId, commentDTO));
+    }
+
+    @GetMapping("/{boardId}/comment")
+    @ApiImplicitParam(name = "token", value = "JWT TOKEN 을 담아주세요", required = true, dataType = "string", paramType = "header")
+    public ResponseEntity<ResponseSuccessDTO<CommentGetListResponseDTO>> getComments(@RequestHeader HttpHeaders headers, @PathVariable(value = "boardId") Long boardId){
+        String jwtToken = headers.get("token").toString();
+        if(jwtToken==null){
+            throw new UnAuthorizedException("접근 권한이 없습니다.");
+        }
+        jwtToken= jwtToken.replace("[","");
+        jwtToken= jwtToken.replace("]","");
+        String userId = authService.getUserId(jwtToken); //userId 가져와짐
+        return ResponseEntity.ok(commentService.getCommentsByBoardId(boardId));
+    }
+
+    @PutMapping("/comment")
+    @ApiImplicitParam(name = "token", value = "JWT TOKEN 을 담아주세요", required = true, dataType = "string", paramType = "header")
+    public ResponseEntity<ResponseSuccessDTO<String>> modifyComment(@RequestHeader HttpHeaders headers, @RequestBody CommentDTO commentDTO){
+        String jwtToken = headers.get("token").toString();
+        if(jwtToken==null){
+            throw new UnAuthorizedException("접근 권한이 없습니다.");
+        }
+        jwtToken= jwtToken.replace("[","");
+        jwtToken= jwtToken.replace("]","");
+        String userId = authService.getUserId(jwtToken); //userId 가져와짐
+        return ResponseEntity.ok(commentService.modifyComment(userId, commentDTO));
+    }
+
+    @DeleteMapping("/comment/{commentId}")
+    @ApiImplicitParam(name = "token", value = "JWT TOKEN 을 담아주세요", required = true, dataType = "string", paramType = "header")
+    public ResponseEntity<ResponseSuccessDTO<String>> deleteComment(@RequestHeader HttpHeaders headers, @PathVariable(value = "commentId") Long commentId) {
+
+        String jwtToken = headers.get("token").toString();
+        if(jwtToken==null){
+            throw new UnAuthorizedException("접근 권한이 없습니다.");
+        }
+        jwtToken= jwtToken.replace("[","");
+        jwtToken= jwtToken.replace("]","");
+        String userId = authService.getUserId(jwtToken); //userId 가져와짐
+
+        return ResponseEntity.ok(commentService.deleteComment(userId, commentId));
+    }
+
 
 }

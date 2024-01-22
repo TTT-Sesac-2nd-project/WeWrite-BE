@@ -1,6 +1,8 @@
 package site.hyundai.wewrite.domain.entity;
 
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
@@ -11,6 +13,9 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @Table(name = "TBL_COMMENT")
+@Where(clause = "deleted_at IS NULL")
+@SQLDelete(sql = "UPDATE TBL_COMMENT SET deleted_at = FROM_TZ(CAST(SYSTIMESTAMP AS TIMESTAMP), 'UTC') AT TIME ZONE 'Asia/Seoul' WHERE comment_id = ?")
+
 public class Comment extends Timestamped{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comment_seq_generator")
