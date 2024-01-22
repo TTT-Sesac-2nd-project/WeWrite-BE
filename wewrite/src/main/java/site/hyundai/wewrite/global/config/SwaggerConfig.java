@@ -30,19 +30,11 @@ public class SwaggerConfig implements WebMvcConfigurer{
     @Bean
     public Docket api() {
 
-        ParameterBuilder parameterBuilder = new ParameterBuilder();
-        parameterBuilder.name("Authorization")
-                .description("token")
-                .modelRef(new ModelRef("String"))
-                .parameterType("header")
-                .required(true)
-                .build();
+
 
         List<Parameter> parameterList = new ArrayList<>();
-        parameterList.add(parameterBuilder.build());
-        return new Docket(DocumentationType.SWAGGER_2).globalOperationParameters(parameterList)
+       return new Docket(DocumentationType.SWAGGER_2)
                 .select().apis(RequestHandlerSelectors.any())
-
                 .paths(PathSelectors.any())
                 .build();
     }

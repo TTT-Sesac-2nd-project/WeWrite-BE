@@ -131,7 +131,7 @@ public class BoardService {
     Board bdto = board.get();
     List<String> boardImageStringList = new ArrayList<>();
     List<BoardImage> boardImageList = boardImageRepository.findAllByBoardId(boardId);
-    User user = userRepository.findById(userId).get();
+    User user = userRepository.findById(bdto.getUser().getUserId()).get();
     for(BoardImage i : boardImageList){
         boardImageStringList.add(i.getImage().getUploadFileUrl());
     }

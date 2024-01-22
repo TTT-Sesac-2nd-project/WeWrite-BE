@@ -1,5 +1,6 @@
 package site.hyundai.wewrite.domain.board.controller;
 
+import io.swagger.annotations.ApiImplicitParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -35,24 +36,9 @@ public class BoardController {
     private final BoardService boardService;
 
 
-//   @GetMapping("/groups/{groupId}")
-//   public ResponseEntity<ResponseSuccessDTO<BoardListGetResponseDTO>> getBoard(@PathVariable("groupsId") Long groupsId,
-//                                                                               @ApiIgnore HttpSession session, @ApiIgnore HttpHeaders headers) {
-//       String jwtToken = headers.get("token").toString();
-//       jwtToken= jwtToken.replace("[","");
-//       jwtToken= jwtToken.replace("]","");
-//       String userId = authService.getUserId(jwtToken); //userId 가져와짐
-//
-//       log.info(": /groups/{groupId}" + userId);
-//
-//
-//       //String userId = "4";
-//       return ResponseEntity.ok(boardService.getBoard(boardNo, userId));
-//
-//   }
-
     @PostMapping(value = "/", consumes = { MediaType.APPLICATION_JSON_VALUE,
             MediaType.MULTIPART_FORM_DATA_VALUE }, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiImplicitParam(name = "token", value = "JWT TOKEN 을 담아주세요", required = true, dataType = "string", paramType = "header")
     public ResponseEntity<ResponseSuccessDTO<BoardPostResponseDTO>> addBoard(@RequestHeader HttpHeaders headers, @RequestPart(value="multipartFiles", required = false)List<MultipartFile> multipartFiles,
                                                                              @RequestPart(value="boardDTO",required = true) BoardPostRequestDTO boardDTO) {
 
@@ -66,6 +52,7 @@ public class BoardController {
     return ResponseEntity.ok(boardService.addBoard(userId, boardDTO,multipartFiles));
     }
     @GetMapping("/groups/{groupId}")
+    @ApiImplicitParam(name = "token", value = "JWT TOKEN 을 담아주세요", required = true, dataType = "string", paramType = "header")
     public ResponseEntity<ResponseSuccessDTO<BoardListGetResponseDTO>> getBoardList(@RequestHeader HttpHeaders headers, @PathVariable Long groupId) {
 
         String jwtToken = headers.get("token").toString();
@@ -76,7 +63,8 @@ public class BoardController {
         return ResponseEntity.ok(boardService.getBoardList(userId, groupId));
     }
     @GetMapping("/{boardId}")
-    public ResponseEntity<ResponseSuccessDTO<BoardDTO>> getBoardId(@RequestHeader HttpHeaders headers,@PathVariable(value = "boardId") Long boardId) {
+    @ApiImplicitParam(name = "token", value = "JWT TOKEN 을 담아주세요", required = true, dataType = "string", paramType = "header")
+    public ResponseEntity<ResponseSuccessDTO<BoardDTO>> getBoard(@RequestHeader HttpHeaders headers,@PathVariable(value = "boardId") Long boardId) {
 
         String jwtToken = headers.get("token").toString();
         jwtToken= jwtToken.replace("[","");
@@ -86,6 +74,7 @@ public class BoardController {
         return ResponseEntity.ok(boardService.getOneBoard(userId, boardId));
     }
     @PutMapping("/{boardId}")
+    @ApiImplicitParam(name = "token", value = "JWT TOKEN 을 담아주세요", required = true, dataType = "string", paramType = "header")
     public ResponseEntity<ResponseSuccessDTO<String>> modifyBoard(@RequestHeader HttpHeaders headers, @RequestPart BoardModifyRequestDTO boardDTO , @PathVariable(value = "boardId") Long boardId) {
 
         String jwtToken = headers.get("token").toString();
@@ -100,6 +89,7 @@ public class BoardController {
     }
 
     @DeleteMapping("/{boardId}")
+    @ApiImplicitParam(name = "token", value = "JWT TOKEN 을 담아주세요", required = true, dataType = "string", paramType = "header")
     public ResponseEntity<ResponseSuccessDTO<String>> deleteBoard(@RequestHeader HttpHeaders headers, @PathVariable(value = "boardId") Long boardId) {
 
         String jwtToken = headers.get("token").toString();
