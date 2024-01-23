@@ -217,5 +217,25 @@ public class BoardService {
         return res;
     }
 
+    public BoardListDTO getBoardById(Long boardId){
+        Board board = boardRepository.findById(boardId).orElseThrow(()-> new EntityNullException("게시글 "+ boardId+" 이 DB에 없습니다."));
+        Long boardImageId = boardImageRepository.findOneLatestImageByBoardId(board.getBoardId()).getImageId();
+        Long commentCount = commentRepository.getCommentCountByBoardId(board.getBoardId());
+        BoardListDTO boardListDTO = BoardListDTO.builder()
+                .boardId(board.getBoardId())
+                .boardTitle(board.getBoardTitle())
+                .boardCreatedDate(timeService.parseLocalDateTimeForMap(board.getBoardCreatedDate()))
+                .userName(board.getUser().getUserName())
+                .groupName(board.getGroup().getGroupName())
+                .boardCommentCount(commentCount)
+                .boardLoc(board.getBoardLoc())
+                .boardImage(imageRepository.findById(boardImageId).get().getUploadFileUrl())
+                .userName(board.getUser().getUserName())
+                .boardImage(board.getUser().getUserImage())
+                .boardViewCount(board.getBoardView())
+                .build();
+        return boardListDTO;
+    }
+
 
 }

@@ -47,7 +47,6 @@ public class GroupController {
     }
 
     // 그룹 페이지 조회
-    // todo: 글 불러오기
     @GetMapping("/{groupId}")
     public ResponseEntity<ResponseSuccessDTO<GroupDetailResponseDTO>> getDetailGroup(@PathVariable Long groupId, @RequestHeader HttpHeaders headers) {
         return ResponseEntity.ok(groupService.getDetailGroup(groupId, getUserService.getUserByToken(headers)));
@@ -64,7 +63,6 @@ public class GroupController {
     @PostMapping("/join")
     @ApiImplicitParam(name = "token", value = "JWT TOKEN 을 담아주세요", required = true, dataType = "string", paramType = "header")
     public ResponseEntity<ResponseSuccessDTO<String>> joinGroup(@RequestBody GroupRequestDTO groupRequestDTO, @RequestHeader HttpHeaders headers) {
-        log.info("🌀🌀🌀🌀🌀🌀🌀", groupRequestDTO.getGroupCode());
         return ResponseEntity.ok(groupService.joinGroup(groupRequestDTO.getGroupCode(), getUserService.getUserByToken(headers)));
     }
 
