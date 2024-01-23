@@ -78,16 +78,19 @@ public class BoardService {
         board.setBoardView(0L);
 
         boardRepository.save(board);
-        List<Image> imageList = uploaderService.uploadFiles("board",multipartFiles);
+        if(multipartFiles!=null) {
 
-        for(Image i : imageList){
-            BoardImage boardImage = BoardImage.builder()
-                    .board(board)
-                    .image(i)
-                    .build();
-            boardImageRepository.save(boardImage);
+
+            List<Image> imageList = uploaderService.uploadFiles("board", multipartFiles);
+
+            for (Image i : imageList) {
+                BoardImage boardImage = BoardImage.builder()
+                        .board(board)
+                        .image(i)
+                        .build();
+                boardImageRepository.save(boardImage);
+            }
         }
-
         ResponseSuccessDTO<BoardPostResponseDTO> res = responseUtil.successResponse("게시글 등록 성공", HttpStatus.OK);
         return res;
     }
