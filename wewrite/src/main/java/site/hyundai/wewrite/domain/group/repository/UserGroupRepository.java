@@ -12,7 +12,7 @@ import java.util.Optional;
  * @author 이소민
  */
 
-public interface UserGroupRepository extends JpaRepository<UserGroup, Long>{
+public interface UserGroupRepository extends JpaRepository<UserGroup, Long>, UserGroupRepositoryCustom{
     Optional<Object> findByGroupAndUser(Group group, User user);
 
     List<UserGroup> findByUser(User user);

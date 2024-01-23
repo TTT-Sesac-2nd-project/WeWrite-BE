@@ -11,7 +11,7 @@ import java.util.Optional;
 /**
  * @author 이소민
  */
-public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
+public interface BookmarkRepository extends JpaRepository<Bookmark, Long> , BookmarkRepositoryCustom {
     List<Bookmark> findByUser(User user);
 
     Optional<Bookmark> findByBoardAndUser(Board board, User user);

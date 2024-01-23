@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface CommentRepositoryCustom {
     List<Comment> getCommentsByBoardId(Long boardId);
+
+    Long getCommentCountByBoardId(Long boardId);
 }

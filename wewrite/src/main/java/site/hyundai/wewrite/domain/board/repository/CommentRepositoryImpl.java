@@ -37,4 +37,12 @@ public class CommentRepositoryImpl extends QuerydslRepositorySupport implements 
                 .orderBy(comment.createdAt.asc())
                 .fetch();
     }
+
+    @Override
+    public Long getCommentCountByBoardId(Long boardId) {
+        return queryFactory.select(comment.count())
+                .from(comment)
+                .where(comment.board.boardId.eq(boardId))
+                .fetchCount();
+    }
 }

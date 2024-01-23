@@ -7,4 +7,5 @@ import java.util.List;
 public interface BoardRepositoryCustom {
 List<Board> getBoardList(Long groupId);
 
+
 }

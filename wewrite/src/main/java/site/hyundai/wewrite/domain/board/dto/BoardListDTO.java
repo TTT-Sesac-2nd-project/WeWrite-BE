@@ -12,9 +12,15 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BoardListDTO {
+    private Long boardId;
     private String boardTitle;
-    private String boardContent;
     private String userName;
     private String boardLoc;
     private String boardImage;
+    private String boardCreatedDate;
+    private Long boardViewCount;
+    private Long boardCommentCount;
+    private String groupName;
+    private boolean isBookmarked;
+
 }

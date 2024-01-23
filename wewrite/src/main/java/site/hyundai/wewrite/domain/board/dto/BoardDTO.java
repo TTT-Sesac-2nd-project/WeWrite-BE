@@ -17,7 +17,7 @@ public class BoardDTO {
     private String boardContent;
     private String userName;
     private String boardLoc;
-    private List<String> imageList;
-
+    private List<String> boardImageList;
+    private String userImage;
 
 }
