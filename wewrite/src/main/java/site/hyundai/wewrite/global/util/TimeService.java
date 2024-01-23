@@ -48,8 +48,8 @@ public class TimeService {
     	return parseLocalDateTime(localDatetime); 
     }
     
-    public String parseLocalDateTimeForLetter(LocalDateTime localDateTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일");
+    public String parseLocalDateTimeForMap(LocalDateTime localDateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
         return localDateTime.format(formatter);
     }
     

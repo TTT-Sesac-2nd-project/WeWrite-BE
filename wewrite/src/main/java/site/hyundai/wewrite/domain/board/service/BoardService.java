@@ -107,7 +107,7 @@ public class BoardService {
        }
         List<BoardListDTO> boardListDTOList = new ArrayList<>();
         for(Board b : boardList){
-            Long boardImageId = boardImageRepository.findOneLatestImageIdByBoardId(b.getBoardId());
+            Long boardImageId = boardImageRepository.findOneLatestImageByBoardId(b.getBoardId()).getImageId();
 
             BoardListDTO boardListDTO = BoardListDTO.builder()
                     .boardTitle(b.getBoardTitle())

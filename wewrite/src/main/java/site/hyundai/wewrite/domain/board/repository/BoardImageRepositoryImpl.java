@@ -40,8 +40,8 @@ public class BoardImageRepositoryImpl extends QuerydslRepositorySupport implemen
     }
 
     @Override
-    public Long findOneLatestImageIdByBoardId(Long boardId) {
-        return queryFactory.select(boardImage.image.imageId)
+    public Image findOneLatestImageByBoardId(Long boardId) {
+        return queryFactory.select(boardImage.image)
                 .from(boardImage)
                 .where(boardImage.board.boardId.eq(boardId))
                 .orderBy(boardImage.image.imageId.desc())
