@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.hyundai.wewrite.domain.auth.dto.AuthGetKakaoTokenDTO;
+import site.hyundai.wewrite.domain.auth.dto.request.UserRequestDTO;
 import site.hyundai.wewrite.domain.auth.dto.response.UserResponseDTO;
 import site.hyundai.wewrite.domain.auth.service.GetUserService;
 import site.hyundai.wewrite.domain.auth.service.UserService;
@@ -77,9 +78,9 @@ public class AuthController {
     }
 
     // 유저 네임 변경
-    @PutMapping("/modify")
-    public ResponseEntity<ResponseSuccessDTO<String>> updateUserName(@RequestParam String userName, @RequestHeader HttpHeaders headers){
-        return ResponseEntity.ok(userService.updateUserName(userName, getUserService.getUserByToken(headers)));
+    @PutMapping("/modify/userName")
+    public ResponseEntity<ResponseSuccessDTO<String>> updateUserName(@RequestBody UserRequestDTO requestDTO, @RequestHeader HttpHeaders headers){
+        return ResponseEntity.ok(userService.updateUserName(requestDTO.getUserName(), getUserService.getUserByToken(headers)));
     }
 
 }

@@ -24,14 +24,14 @@ public class EmotionController {
     private final GetUserService getUserService;
 
     // 공감 조회
-    @GetMapping
-    public ResponseEntity<ResponseSuccessDTO<EmotionResponseDTO>> getEmotion(@RequestParam Long boardId, @RequestHeader HttpHeaders headers) {
+    @GetMapping("/{boardId}")
+    public ResponseEntity<ResponseSuccessDTO<EmotionResponseDTO>> getEmotion(@PathVariable Long boardId, @RequestHeader HttpHeaders headers) {
         return ResponseEntity.ok(emotionService.getEmotion(boardId, getUserService.getUserByToken(headers)));
     }
 
     // 공감 등록, 수정, 삭제
-    @PutMapping
-    public ResponseEntity<ResponseSuccessDTO<String>> updateEmotion(@RequestParam Long boardId, @RequestBody EmotionRequestDTO requestDTO, @RequestHeader HttpHeaders headers) {
+    @PutMapping("/{boardId}")
+    public ResponseEntity<ResponseSuccessDTO<String>> updateEmotion(@PathVariable Long boardId, @RequestBody EmotionRequestDTO requestDTO, @RequestHeader HttpHeaders headers) {
         return ResponseEntity.ok(emotionService.updateEmotion(boardId, requestDTO, getUserService.getUserByToken(headers)));
     }
 

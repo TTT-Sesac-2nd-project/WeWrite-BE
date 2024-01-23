@@ -31,8 +31,8 @@ public class BookmarkController {
     }
 
     // 북마크 등록, 삭제
-    @PutMapping
-    public ResponseEntity<ResponseSuccessDTO<String>> updateBookmark(@RequestParam Long boardId, @RequestHeader HttpHeaders headers) {
+    @PutMapping("/{boardId}")
+    public ResponseEntity<ResponseSuccessDTO<String>> updateBookmark(@PathVariable Long boardId, @RequestHeader HttpHeaders headers) {
         return ResponseEntity.ok(bookmarkService.updateBookmark(boardId, getUserService.getUserByToken(headers)));
     }
 }

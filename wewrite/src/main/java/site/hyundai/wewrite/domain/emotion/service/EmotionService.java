@@ -35,7 +35,14 @@ public class EmotionService {
     public ResponseSuccessDTO<EmotionResponseDTO> getEmotion(Long boardId, User user) {
         Board board = getBoardService.getBoardById(boardId);
         Emotion emotion = emotionRepository.findByBoardAndUser(board, user).orElse(null);
-        return responseUtil.successResponse(emotion.getEmotionType(), HttpStatus.OK);
+
+        EmotionStatus emotionType;
+        if(emotion == null) {
+            emotionType = null;
+        } else {
+            emotionType = emotion.getEmotionType();
+        }
+        return responseUtil.successResponse(emotionType, HttpStatus.OK);
     }
 
     // 공감 등록 및 수정
