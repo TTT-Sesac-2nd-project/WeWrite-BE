@@ -7,6 +7,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.hyundai.wewrite.domain.auth.dto.AuthGetKakaoTokenDTO;
+import site.hyundai.wewrite.domain.auth.dto.response.UserResponseDTO;
+import site.hyundai.wewrite.domain.auth.service.GetUserService;
+import site.hyundai.wewrite.domain.auth.service.UserService;
 import site.hyundai.wewrite.global.dto.ResponseSuccessDTO;
 import site.hyundai.wewrite.domain.auth.service.AuthService;
 import site.hyundai.wewrite.global.exeception.service.UnAuthorizedException;
@@ -20,6 +23,8 @@ import java.io.IOException;
 public class AuthController {
 
     private final AuthService authService;
+    private final UserService userService;
+    private final GetUserService getUserService;
 
 
     @PostMapping("/kakao")
@@ -64,5 +69,18 @@ public class AuthController {
         
         return ResponseEntity.ok(authService.validateToken(jwtToken));
     }
+
+    // 유저 정보 조회
+    @GetMapping
+    public ResponseEntity<ResponseSuccessDTO<UserResponseDTO>> getUserInfo(@RequestHeader HttpHeaders headers){
+        return ResponseEntity.ok(userService.getUserInfo(getUserService.getUserByToken(headers)));
+    }
+
+    // 유저 네임 변경
+    @PutMapping("/modify")
+    public ResponseEntity<ResponseSuccessDTO<String>> updateUserName(@RequestParam String userName, @RequestHeader HttpHeaders headers){
+        return ResponseEntity.ok(userService.updateUserName(userName, getUserService.getUserByToken(headers)));
+    }
+
 }
 
