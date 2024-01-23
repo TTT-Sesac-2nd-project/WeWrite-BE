@@ -1,4 +1,4 @@
-package site.hyundai.wewrite.domain.auth.entity;
+package site.hyundai.wewrite.domain.entity;
 
 import lombok.*;
 
@@ -27,7 +27,7 @@ public class Token {
 
     @Column(length = 2000)
     @NotNull
-    @Size(max = 2000)
+
     private String tokenValue;
 
 }

@@ -27,7 +27,7 @@ public class JwtTokenProvider {
 
     @PostConstruct
     protected void init() {
-        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+        //secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
     public String createAccessToken(String accessToken, String userId) {
@@ -70,4 +70,5 @@ public class JwtTokenProvider {
 
 
     }
+
 }

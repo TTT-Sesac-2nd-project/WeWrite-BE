@@ -1,4 +1,4 @@
-package site.hyundai.wewrite.domain.auth.entity;
+package site.hyundai.wewrite.domain.entity;
 
 import lombok.*;
 
@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 @Builder
 @AllArgsConstructor
 @Table(name = "TBL_USER")
-public class User {
+public class User extends Timestamped {
 
     @Id
     @Column(length = 2000, unique = true, name = "user_id")
