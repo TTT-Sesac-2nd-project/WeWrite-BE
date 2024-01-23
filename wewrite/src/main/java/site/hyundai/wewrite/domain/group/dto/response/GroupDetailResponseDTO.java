@@ -1,20 +1,26 @@
 package site.hyundai.wewrite.domain.group.dto.response;
 
 import lombok.Getter;
+import lombok.Setter;
+import site.hyundai.wewrite.domain.board.dto.BoardListDTO;
+import site.hyundai.wewrite.domain.board.dto.response.BoardListGetResponseDTO;
 import site.hyundai.wewrite.domain.entity.Group;
+
+import java.util.List;
 
 /**
  * @author 이소민
  */
 
 @Getter
+@Setter
 public class GroupDetailResponseDTO {
     // 그룹 이름, 그룹 사진, 그룹 멤버 수, 초대코드
-    // todo : 그룹의 최신 글 (사진, 작성자, 그룹명, 북마크 여부, 글 제목, 위치, 댓글 수, 조회수, 작성 날짜)
     private final String groupName;
     private final String groupCode;
     private final Long groupMemberCount;
     private final String groupImageUrl;
+    private List<BoardListDTO> boardList;
 
     public GroupDetailResponseDTO(Group group, String groupImageUrl) {
         this.groupName = group.getGroupName();

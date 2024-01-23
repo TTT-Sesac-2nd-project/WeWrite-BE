@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.hyundai.wewrite.domain.board.dto.BoardListDTO;
+import site.hyundai.wewrite.domain.board.service.BoardService;
 import site.hyundai.wewrite.domain.board.service.GetBoardService;
 import site.hyundai.wewrite.domain.bookmark.dto.response.BookmarkResponseDTO;
 import site.hyundai.wewrite.domain.bookmark.repository.BookmarkRepository;
@@ -26,6 +28,7 @@ public class BookmarkService {
     private final ResponseUtil responseUtil;
     private final BookmarkRepository bookmarkRepository;
     private final GetBoardService getBoardService;
+    private final BoardService boardService;
 
 
     // 북마크 조회
@@ -36,8 +39,7 @@ public class BookmarkService {
 
         for (Bookmark bookmark : bookmarks) {
             Board board = bookmark.getBoard();
-            // todo : 글 추가
-            BookmarkResponseDTO dto = new BookmarkResponseDTO(bookmark.getBookmarkId(), board);
+            BookmarkResponseDTO dto = new BookmarkResponseDTO(bookmark.getBookmarkId(), boardService.getBoardById(board.getBoardId()));
             bookmarkDTOs.add(dto);
         }
 

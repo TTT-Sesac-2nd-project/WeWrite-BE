@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.hyundai.wewrite.domain.board.dto.response.BoardListGetResponseDTO;
+import site.hyundai.wewrite.domain.board.service.BoardService;
 import site.hyundai.wewrite.domain.entity.*;
 import site.hyundai.wewrite.domain.group.dto.request.GroupRequestDTO;
 import site.hyundai.wewrite.domain.group.dto.response.GroupDetailResponseDTO;
@@ -35,6 +37,7 @@ public class GroupService {
     private final GroupRepository groupRepository;
     private final UserGroupRepository userGroupRepository;
     private final GroupImageRepository groupImageRepository;
+    private final BoardService boardService;
 
     // 그룹 생성
     @Transactional
@@ -66,6 +69,9 @@ public class GroupService {
         GroupImage groupImage = groupImageRepository.findByGroup(group).orElse(null);
         String groupImageUrl = (groupImage != null) ? groupImage.getImage().getUploadFileUrl() : null;
         GroupDetailResponseDTO groupDetailResponseDTO = new GroupDetailResponseDTO(group, groupImageUrl);
+        // 글 불러오기
+        ResponseSuccessDTO<BoardListGetResponseDTO> boardListResponse = boardService.getBoardList(user.getUserId(), groupId);
+        groupDetailResponseDTO.setBoardList(boardListResponse.getData().getBoardList());
         return responseUtil.successResponse(groupDetailResponseDTO, HttpStatus.OK);
     }
 
