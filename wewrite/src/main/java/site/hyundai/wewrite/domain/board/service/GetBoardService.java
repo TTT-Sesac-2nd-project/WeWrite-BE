@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.hyundai.wewrite.domain.board.repository.BoardRepository;
 import site.hyundai.wewrite.domain.entity.Board;
+import site.hyundai.wewrite.global.exeception.service.BadVariableRequestException;
 
 @Service
 @RequiredArgsConstructor
@@ -13,6 +14,6 @@ public class GetBoardService {
 
     @Transactional(readOnly = true)
     public Board getBoardById(Long boardId) {
-        return boardRepository.findById(boardId).orElseThrow(() -> new RuntimeException("해당 게시글이 존재하지 않습니다."));
+        return boardRepository.findById(boardId).orElseThrow(() -> new BadVariableRequestException("해당 게시글이 존재하지 않습니다."));
     }
 }

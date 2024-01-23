@@ -15,7 +15,7 @@ import site.hyundai.wewrite.domain.group.repository.GroupImageRepository;
 import site.hyundai.wewrite.domain.group.repository.GroupRepository;
 import site.hyundai.wewrite.domain.group.repository.UserGroupRepository;
 import site.hyundai.wewrite.global.dto.ResponseSuccessDTO;
-import site.hyundai.wewrite.global.exeception.service.DefaultException;
+import site.hyundai.wewrite.global.exeception.service.DuplicateRequestException;
 import site.hyundai.wewrite.global.exeception.service.EntityNullException;
 import site.hyundai.wewrite.global.exeception.service.UnAuthorizedException;
 import site.hyundai.wewrite.global.util.ResponseUtil;
@@ -103,7 +103,7 @@ public class GroupService {
         // 이미 가입된 그룹인지 확인
         userGroupRepository.findByGroupAndUser(group, user).ifPresent(
                 (userGroup) -> {
-                    throw new DefaultException("이미 가입된 그룹입니다.");
+                    throw new DuplicateRequestException("이미 가입된 그룹입니다.");
                 }
         );
 

@@ -68,6 +68,12 @@ public class ServiceExceptionResolver {
         return responseUtil.buildErrorResponse(HttpStatus.UNAUTHORIZED, e.getMessage(), request.getRequestURI());
     }
 
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(value = DuplicateRequestException.class)
+    public ResponseErrorDTO<?> handle(DuplicateRequestException e, HttpServletRequest request) {
+        return responseUtil.buildErrorResponse(HttpStatus.CONFLICT, e.getMessage(), request.getRequestURI());
+    }
+
     private String getParams(HttpServletRequest req) {
         StringBuilder params = new StringBuilder();
         Enumeration<String> keys = req.getParameterNames();
