@@ -25,4 +25,9 @@ public class Bookmark extends Timestamped{
     @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
+
+    public Bookmark(Board board, User user) {
+        this.board = board;
+        this.user = user;
+    }
 }
