@@ -11,8 +11,10 @@ import java.util.List;
 
 @Getter
 @Setter
-@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class GroupRequestDTO {
     private String groupName;
+    private String groupCode;
     List<MultipartFile> groupImage;
 }

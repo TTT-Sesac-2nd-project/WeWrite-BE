@@ -63,8 +63,9 @@ public class GroupController {
     // 초대코드로 그룹 가입하기
     @PostMapping("/join")
     @ApiImplicitParam(name = "token", value = "JWT TOKEN 을 담아주세요", required = true, dataType = "string", paramType = "header")
-    public ResponseEntity<ResponseSuccessDTO<String>> joinGroup(@RequestParam String groupCode, @RequestHeader HttpHeaders headers) {
-        return ResponseEntity.ok(groupService.joinGroup(groupCode, getUserService.getUserByToken(headers)));
+    public ResponseEntity<ResponseSuccessDTO<String>> joinGroup(@RequestBody GroupRequestDTO groupRequestDTO, @RequestHeader HttpHeaders headers) {
+        log.info("🌀🌀🌀🌀🌀🌀🌀", groupRequestDTO.getGroupCode());
+        return ResponseEntity.ok(groupService.joinGroup(groupRequestDTO.getGroupCode(), getUserService.getUserByToken(headers)));
     }
 
     // 그룹 수정
