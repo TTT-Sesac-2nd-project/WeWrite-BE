@@ -161,5 +161,13 @@ public class BoardController {
         return ResponseEntity.ok(commentService.deleteComment(userId, commentId));
     }
 
+    @GetMapping("/comment/{commentId}")
+    //@ApiImplicitParam(name = "token", value = "JWT TOKEN 을 담아주세요", required = true, dataType = "string", paramType = "header")
+    public ResponseEntity<ResponseSuccessDTO<CommentDTO>> getComment(@RequestHeader HttpHeaders headers,@PathVariable(value="commentId") Long commentId){
+    return ResponseEntity.ok(commentService.getComment(commentId));
+    }
+
+
+
 
 }

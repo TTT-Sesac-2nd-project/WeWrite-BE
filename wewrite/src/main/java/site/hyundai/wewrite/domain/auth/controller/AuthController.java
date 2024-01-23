@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import site.hyundai.wewrite.domain.auth.dto.AuthGetKakaoTokenDTO;
 import site.hyundai.wewrite.global.dto.ResponseSuccessDTO;
 import site.hyundai.wewrite.domain.auth.service.AuthService;
+import site.hyundai.wewrite.global.exeception.service.UnAuthorizedException;
 
 import java.io.IOException;
 
@@ -42,6 +43,9 @@ public class AuthController {
     @PostMapping("/issue-token")
     @ApiImplicitParam(name = "token", value = "JWT TOKEN 을 담아주세요", required = true, dataType = "string", paramType = "header")
     public ResponseEntity<ResponseSuccessDTO<AuthGetKakaoTokenDTO>> getJwtToken(@RequestHeader HttpHeaders headers){
+        if(headers.get("access-token").isEmpty()){
+            throw new UnAuthorizedException("access-token 이 없습니다.");
+        }
         String access_token = headers.get("access-token").toString();
         access_token= access_token.replace("[","");
         access_token= access_token.replace("]","");

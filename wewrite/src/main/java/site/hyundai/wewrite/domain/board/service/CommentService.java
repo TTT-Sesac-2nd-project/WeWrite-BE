@@ -100,4 +100,17 @@ public class CommentService {
         ResponseSuccessDTO<String> res = responseUtil.successResponse("댓글"+commentId +" 번 삭제 성공", HttpStatus.OK);
         return res;
     }
+
+    public ResponseSuccessDTO<CommentDTO> getComment(Long commentId){
+        if(commentId==null){
+            throw new EntityNullException("댓글 ID 가 없습니다.");
+        }
+        Comment comment = commentRepository.findById(commentId).orElseThrow(()-> new EntityNullException("댓글이 DB에 없습니다."));
+        CommentDTO commentDTO = CommentDTO.builder()
+                .commentId(comment.getCommentId())
+                .commentContent(comment.getCommentContent()).build();
+        ResponseSuccessDTO<CommentDTO> res = responseUtil.successResponse(commentDTO, HttpStatus.OK);
+
+    return res;
+    }
 }
