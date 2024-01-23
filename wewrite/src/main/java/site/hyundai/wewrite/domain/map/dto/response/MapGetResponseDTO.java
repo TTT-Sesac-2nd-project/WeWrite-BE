@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MapBoardGetResponseDTO {
+public class MapGetResponseDTO {
     private String boardTitle;
     private String boardContent;
     private String boardCreatedDate;

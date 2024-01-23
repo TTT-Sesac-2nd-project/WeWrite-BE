@@ -52,5 +52,14 @@ public class TimeService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
         return localDateTime.format(formatter);
     }
+
+	//"2022-01-23T14:45:30" 으로 주셈
+	public LocalDateTime parseStringDateTimeForMap(String localDateTime){
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+
+		return LocalDateTime.parse(localDateTime, formatter);
+
+	}
     
 }

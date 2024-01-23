@@ -18,7 +18,7 @@ public class BoardPostRequestDTO {
     private String boardLoc;
     private String boardContent;
     private Long groupId;
-    private LocalDateTime boardCreatedDate;
+    private String boardCreatedDate;
 
     private String boardLat;
     private String boardLng;

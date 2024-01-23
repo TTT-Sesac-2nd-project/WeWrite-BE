@@ -68,26 +68,28 @@ public class BoardService {
 
         User user = userRepository.findById(userId).get();
 
-//        Board board = Board.builder()
-//                .boardTitle(boardDTO.getBoardTitle())
-//                .boardLoc(boardDTO.getBoardLoc())
-//                .boardContent(boardDTO.getBoardContent())
-//                .boardCreatedDate(boardDTO.getBoardCreatedDate())
-//                // 날짜 추가 로직 추가해야함
-//                .group(group)
-//                .user(user)
-//                .build();
+        Board board = Board.builder()
+                .boardTitle(boardDTO.getBoardTitle())
+                .boardLoc(boardDTO.getBoardLoc())
+                .boardContent(boardDTO.getBoardContent())
+                .boardCreatedDate(timeService.parseStringDateTimeForMap(boardDTO.getBoardCreatedDate()))
+                .group(group)
+                .user(user)
+                .boardLat(boardDTO.getBoardLat())
+                .boardLong(boardDTO.getBoardLng())
+                .boardView(0L)
+                .build();
 
-        Board board = new Board();
-        board.setBoardTitle(boardDTO.getBoardTitle());
-        board.setBoardLoc(boardDTO.getBoardLoc());
-        board.setBoardContent(boardDTO.getBoardContent());
-        board.setBoardCreatedDate(boardDTO.getBoardCreatedDate());
-        board.setGroup(group);
-        board.setUser(user);
-        board.setBoardLat(boardDTO.getBoardLat());
-        board.setBoardLong(boardDTO.getBoardLng());
-        board.setBoardView(0L);
+//        Board board = new Board();
+//        board.setBoardTitle(boardDTO.getBoardTitle());
+//        board.setBoardLoc(boardDTO.getBoardLoc());
+//        board.setBoardContent(boardDTO.getBoardContent());
+//        board.setBoardCreatedDate(boardDTO.getBoardCreatedDate());
+//        board.setGroup(group);
+//        board.setUser(user);
+//        board.setBoardLat(boardDTO.getBoardLat());
+//        board.setBoardLong(boardDTO.getBoardLng());
+//        board.setBoardView(0L);
 
         boardRepository.save(board);
         if(multipartFiles!=null) {
@@ -135,6 +137,7 @@ public class BoardService {
             for(Board b : bL) {
                 Long boardImageId = boardImageRepository.findOneLatestImageByBoardId(b.getBoardId()).getImageId();
                 Long commentCount = commentRepository.getCommentCountByBoardId(b.getBoardId());
+                log.info("DATE"+ b.getCreatedAt().toString());
                 BoardListDTO boardListDTO = BoardListDTO.builder()
                         .boardId(b.getBoardId())
                         .boardTitle(b.getBoardTitle())

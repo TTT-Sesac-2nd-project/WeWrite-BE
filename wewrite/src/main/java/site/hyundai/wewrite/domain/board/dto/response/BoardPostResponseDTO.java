@@ -16,6 +16,6 @@ public class BoardPostResponseDTO {
     private String boardLoc;
     private String boardContent;
     private String groupId;
-    private LocalDateTime boardCreatedDate;
+    private String boardCreatedDate;
 
 }

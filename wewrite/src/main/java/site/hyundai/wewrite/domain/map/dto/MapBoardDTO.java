@@ -13,5 +13,6 @@ public class MapBoardDTO {
     private Long boardId;
     private String boardLat;
     private String boardLng;
+    private String boardImage;
 
 }
