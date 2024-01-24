@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.hyundai.wewrite.domain.auth.service.GetUserService;
 import site.hyundai.wewrite.domain.board.service.BoardService;
 import site.hyundai.wewrite.domain.board.service.GetBoardService;
 import site.hyundai.wewrite.domain.bookmark.dto.response.BookmarkResponseDTO;
@@ -28,11 +29,13 @@ public class BookmarkService {
     private final BookmarkRepository bookmarkRepository;
     private final GetBoardService getBoardService;
     private final BoardService boardService;
+    private final GetUserService getUserService;
 
 
     // 북마크 조회
     @Transactional(readOnly = true)
-    public ResponseSuccessDTO<List<BookmarkResponseDTO>> getBookmark(User user) {
+    public ResponseSuccessDTO<List<BookmarkResponseDTO>> getBookmark(String userId) {
+        User user = getUserService.getUserByUserId(userId);
         List<Bookmark> bookmarks = bookmarkRepository.findByUser(user);
         List<BookmarkResponseDTO> bookmarkDTOs = new ArrayList<>();
 
@@ -48,7 +51,8 @@ public class BookmarkService {
 
     // 북마크 등록, 삭제
     @Transactional
-    public ResponseSuccessDTO<String> updateBookmark(Long boardId, User user) {
+    public ResponseSuccessDTO<String> updateBookmark(Long boardId, String userId) {
+        User user = getUserService.getUserByUserId(userId);
         Board board = getBoardService.getBoardById(boardId);
 
         Optional<Bookmark> existingBookmarkOpt = bookmarkRepository.findByBoardAndUser(board, user);

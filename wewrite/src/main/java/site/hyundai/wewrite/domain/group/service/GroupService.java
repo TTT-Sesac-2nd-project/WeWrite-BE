@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.hyundai.wewrite.domain.auth.service.GetUserService;
 import site.hyundai.wewrite.domain.board.dto.response.BoardListGetResponseDTO;
 import site.hyundai.wewrite.domain.board.service.BoardService;
 import site.hyundai.wewrite.domain.entity.*;
@@ -38,10 +39,12 @@ public class GroupService {
     private final UserGroupRepository userGroupRepository;
     private final GroupImageRepository groupImageRepository;
     private final BoardService boardService;
+    private final GetUserService getUserService;
 
     // 그룹 생성
     @Transactional
-    public ResponseSuccessDTO<String> createGroup(GroupRequestDTO groupRequestDTO, Image image, User user) {
+    public ResponseSuccessDTO<String> createGroup(GroupRequestDTO groupRequestDTO, Image image, String userId) {
+        User user = getUserService.getUserByUserId(userId);
         // group 저장
         Group group = new Group(groupRequestDTO.getGroupName(), generateRandomCode(8));
         groupRepository.save(group);
@@ -62,7 +65,8 @@ public class GroupService {
 
     // 그룹 페이지 조회
     @Transactional
-    public ResponseSuccessDTO<GroupDetailResponseDTO> getDetailGroup(Long groupId, User user) {
+    public ResponseSuccessDTO<GroupDetailResponseDTO> getDetailGroup(Long groupId, String userId) {
+        User user = getUserService.getUserByUserId(userId);
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new EntityNullException("해당 그룹이 없습니다. id=" + groupId));
         checkRole(group, user);
         // groupImage
@@ -77,7 +81,8 @@ public class GroupService {
 
     // 내 그룹 조회
     @Transactional
-    public ResponseSuccessDTO<List<GroupResponseDTO>> getMyGroups(User user) {
+    public ResponseSuccessDTO<List<GroupResponseDTO>> getMyGroups(String userId) {
+        User user = getUserService.getUserByUserId(userId);
         List<UserGroup> userGroups = userGroupRepository.findByUser(user);
 
         List<GroupResponseDTO> myGroups = new ArrayList<>();
@@ -95,7 +100,8 @@ public class GroupService {
 
     // 초대코드로 그룹 가입하기
     @Transactional
-    public ResponseSuccessDTO<String> joinGroup(String groupCode, User user) {
+    public ResponseSuccessDTO<String> joinGroup(String groupCode, String userId) {
+        User user = getUserService.getUserByUserId(userId);
         Group group = groupRepository.findByGroupCode(groupCode).orElseThrow(
                 () -> new EntityNullException("해당 그룹이 존재하지 않습니다.")
         );
@@ -120,7 +126,8 @@ public class GroupService {
 
     // 그룹 수정
     @Transactional
-    public ResponseSuccessDTO<String> updateGroup(Long groupId, GroupRequestDTO groupRequestDTO, Image image, User user) {
+    public ResponseSuccessDTO<String> updateGroup(Long groupId, GroupRequestDTO groupRequestDTO, Image image, String userId) {
+        User user = getUserService.getUserByUserId(userId);
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new EntityNullException("해당 그룹이 없습니다. id=" + groupId));
         checkRole(group, user);
 
@@ -140,7 +147,8 @@ public class GroupService {
 
     // 그룹 삭제
     @Transactional
-    public ResponseSuccessDTO<String> deleteGroup(Long groupId, User user) {
+    public ResponseSuccessDTO<String> deleteGroup(Long groupId, String userId) {
+        User user = getUserService.getUserByUserId(userId);
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new EntityNullException("해당 그룹이 없습니다. id=" + groupId));
         checkRole(group, user);
 
@@ -153,7 +161,8 @@ public class GroupService {
     }
 
     @Transactional
-    public ResponseSuccessDTO<String> leaveGroup(Long groupId, User user) {
+    public ResponseSuccessDTO<String> leaveGroup(Long groupId, String userId) {
+        User user = getUserService.getUserByUserId(userId);
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new EntityNullException("해당 그룹이 없습니다. id=" + groupId));
         checkRole(group, user);
 

@@ -20,12 +20,14 @@ public class UserService {
     private final ResponseUtil responseUtil;
     private final GroupService groupService;
     private final UserRepository userRepository;
+    private final GetUserService getUserService;
 
     // 유저 정보 조회
     @Transactional(readOnly = true)
-    public ResponseSuccessDTO<UserResponseDTO> getUserInfo(User user) {
+    public ResponseSuccessDTO<UserResponseDTO> getUserInfo(String userId) {
+        User user = getUserService.getUserByUserId(userId);
         // 내 그룹 갯수 조회
-        ResponseSuccessDTO<List<GroupResponseDTO>> myGroupsResponse = groupService.getMyGroups(user);
+        ResponseSuccessDTO<List<GroupResponseDTO>> myGroupsResponse = groupService.getMyGroups(userId);
         List<GroupResponseDTO> myGroups = myGroupsResponse.getData();
         int numberOfMyGroups = myGroups != null ? myGroups.size() : 0;
 
@@ -35,7 +37,8 @@ public class UserService {
 
     // 유저 이름 변경
     @Transactional
-    public ResponseSuccessDTO<String> updateUserName(String userName, User user) {
+    public ResponseSuccessDTO<String> updateUserName(String userName, String userId) {
+        User user = getUserService.getUserByUserId(userId);
         user.setUserName(userName);
         userRepository.save(user);
         return responseUtil.successResponse("유저 이름 변경 완료", HttpStatus.OK);
