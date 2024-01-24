@@ -5,17 +5,14 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import site.hyundai.wewrite.domain.entity.BoardImage;
 import site.hyundai.wewrite.domain.entity.Image;
 import site.hyundai.wewrite.domain.entity.QBoardImage;
-import site.hyundai.wewrite.domain.entity.QImage;
-import site.hyundai.wewrite.domain.image.repository.ImageRepositoryCustom;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
 import java.util.List;
 
-import static site.hyundai.wewrite.domain.entity.QBoardImage.boardImage;
-import static site.hyundai.wewrite.domain.entity.QImage.image;
-
+/**
+ * @author 김동욱
+ */
 public class BoardImageRepositoryImpl extends QuerydslRepositorySupport implements BoardImageRepositoryCustom {
 
     @PersistenceContext
@@ -29,7 +26,7 @@ public class BoardImageRepositoryImpl extends QuerydslRepositorySupport implemen
 
     }
 
-   QBoardImage boardImage = QBoardImage.boardImage;
+    QBoardImage boardImage = QBoardImage.boardImage;
 
     @Override
     public List<BoardImage> findAllByBoardId(Long boardId) {

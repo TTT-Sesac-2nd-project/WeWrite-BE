@@ -1,4 +1,4 @@
-package site.hyundai.wewrite.domain.board.dto.request;
+package site.hyundai.wewrite.domain.comment.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentPostRequestDTO {
+public class CommentRequestDTO {
     private String commentContent;
 }

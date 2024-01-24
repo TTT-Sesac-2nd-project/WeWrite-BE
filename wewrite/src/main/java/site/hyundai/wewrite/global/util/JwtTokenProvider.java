@@ -10,9 +10,11 @@ import site.hyundai.wewrite.global.exeception.service.EntityNullException;
 import site.hyundai.wewrite.global.exeception.service.UnAuthorizedException;
 
 import javax.annotation.PostConstruct;
-import java.util.Base64;
 import java.util.Date;
 
+/**
+ * @author 김동욱
+ */
 @RequiredArgsConstructor
 @Component
 @Slf4j

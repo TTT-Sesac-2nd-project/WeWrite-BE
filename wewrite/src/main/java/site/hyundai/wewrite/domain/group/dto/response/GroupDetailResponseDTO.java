@@ -3,7 +3,6 @@ package site.hyundai.wewrite.domain.group.dto.response;
 import lombok.Getter;
 import lombok.Setter;
 import site.hyundai.wewrite.domain.board.dto.BoardListDTO;
-import site.hyundai.wewrite.domain.board.dto.response.BoardListGetResponseDTO;
 import site.hyundai.wewrite.domain.entity.Group;
 
 import java.util.List;

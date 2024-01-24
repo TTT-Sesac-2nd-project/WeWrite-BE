@@ -3,8 +3,6 @@ package site.hyundai.wewrite.global.exeception.resolver;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -17,6 +15,9 @@ import site.hyundai.wewrite.global.util.ResponseUtil;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
 
+/**
+ * @author 김동욱
+ */
 @Slf4j
 @RestControllerAdvice
 @RequiredArgsConstructor
@@ -62,11 +63,20 @@ public class ServiceExceptionResolver {
     public ResponseErrorDTO<?> handle(DecryptionFailedException e, HttpServletRequest request) {
         return responseUtil.buildErrorResponse(HttpStatus.BAD_REQUEST, e.getMessage(), request.getRequestURI());
     }
+
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(value = UnAuthorizedException.class)
     public ResponseErrorDTO<?> handle(UnAuthorizedException e, HttpServletRequest request) {
         return responseUtil.buildErrorResponse(HttpStatus.UNAUTHORIZED, e.getMessage(), request.getRequestURI());
     }
+
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(value = DuplicateRequestException.class)
+    public ResponseErrorDTO<?> handle(DuplicateRequestException e, HttpServletRequest request) {
+        return responseUtil.buildErrorResponse(HttpStatus.CONFLICT, e.getMessage(), request.getRequestURI());
+    }
+
 
     private String getParams(HttpServletRequest req) {
         StringBuilder params = new StringBuilder();

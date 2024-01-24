@@ -13,6 +13,11 @@ public class MapBoardDTO {
     private Long boardId;
     private String boardLat;
     private String boardLng;
+    private String boardTitle;
+    private String boardContent;
+    private String boardCreatedDate;
+    private String groupName;
     private String boardImage;
+
 
 }

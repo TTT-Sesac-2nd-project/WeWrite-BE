@@ -1,10 +1,10 @@
 package site.hyundai.wewrite.domain.bookmark.dto.response;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import site.hyundai.wewrite.domain.board.dto.BoardListDTO;
-import site.hyundai.wewrite.domain.entity.Board;
 
-import java.util.List;
 
 /**
  * @author 이소민
