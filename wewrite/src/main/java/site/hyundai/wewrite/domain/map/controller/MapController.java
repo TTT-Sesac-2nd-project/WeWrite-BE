@@ -7,9 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.hyundai.wewrite.domain.auth.service.AuthService;
-import site.hyundai.wewrite.domain.board.dto.BoardDTO;
 import site.hyundai.wewrite.domain.board.service.BoardService;
-import site.hyundai.wewrite.domain.board.service.CommentService;
 import site.hyundai.wewrite.domain.map.dto.response.MapGetResponseDTO;
 import site.hyundai.wewrite.domain.map.dto.response.MapListGetResponseDTO;
 import site.hyundai.wewrite.domain.map.service.MapService;
@@ -30,8 +28,8 @@ public class MapController {
     public ResponseEntity<ResponseSuccessDTO<MapListGetResponseDTO>> getMapBoard(@RequestHeader HttpHeaders headers, @PathVariable(value = "groupId") Long boardId) {
 
         String jwtToken = headers.get("token").toString();
-        jwtToken= jwtToken.replace("[","");
-        jwtToken= jwtToken.replace("]","");
+        jwtToken = jwtToken.replace("[", "");
+        jwtToken = jwtToken.replace("]", "");
         String userId = authService.getUserId(jwtToken); //userId 가져와짐
 
         return ResponseEntity.ok(mapService.getMapList(userId, boardId));
@@ -42,8 +40,8 @@ public class MapController {
     public ResponseEntity<ResponseSuccessDTO<MapGetResponseDTO>> getMap(@RequestHeader HttpHeaders headers, @PathVariable(value = "boardId") Long boardId) {
 
         String jwtToken = headers.get("token").toString();
-        jwtToken= jwtToken.replace("[","");
-        jwtToken= jwtToken.replace("]","");
+        jwtToken = jwtToken.replace("[", "");
+        jwtToken = jwtToken.replace("]", "");
         String userId = authService.getUserId(jwtToken); //userId 가져와짐
 
         return ResponseEntity.ok(mapService.getMap(boardId));

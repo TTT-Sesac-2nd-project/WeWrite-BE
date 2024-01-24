@@ -1,21 +1,17 @@
-package site.hyundai.wewrite.domain.board.repository;
+package site.hyundai.wewrite.domain.comment.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
-import site.hyundai.wewrite.domain.entity.Board;
 import site.hyundai.wewrite.domain.entity.Comment;
-import site.hyundai.wewrite.domain.entity.QBoard;
 import site.hyundai.wewrite.domain.entity.QComment;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
 import java.util.List;
 
-import static site.hyundai.wewrite.domain.entity.QBoard.board;
 import static site.hyundai.wewrite.domain.entity.QComment.comment;
 
-public class CommentRepositoryImpl extends QuerydslRepositorySupport implements  CommentRepositoryCustom{
+public class CommentRepositoryImpl extends QuerydslRepositorySupport implements CommentRepositoryCustom {
     @PersistenceContext
     EntityManager em;
 
@@ -27,7 +23,7 @@ public class CommentRepositoryImpl extends QuerydslRepositorySupport implements 
 
     }
 
-   QComment qComment = comment;
+    QComment qComment = comment;
 
     @Override
     public List<Comment> getCommentsByBoardId(Long boardId) {
