@@ -2,7 +2,6 @@ package site.hyundai.wewrite.domain.board.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,14 +37,9 @@ public class BoardController {
     @PostMapping(value = "/", consumes = {MediaType.APPLICATION_JSON_VALUE,
             MediaType.MULTIPART_FORM_DATA_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "게시글 작성", notes = "게시글을 작성합니다.")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "JWT TOKEN 이 들어갑니다.", required = true, dataType = "string", paramType = "header"),
-            @ApiImplicitParam(name = "boardDTO", value = "boardDTO 를 담아주세요", required = true, dataTypeClass = BoardDTO.class, paramType = "string"),
-    })
-
+    @ApiImplicitParam(name = "boardDTO", value = "boardDTO 를 담아주세요", required = true, dataTypeClass = BoardDTO.class, paramType = "string")
     public ResponseEntity<ResponseSuccessDTO<BoardPostResponseDTO>> addBoard(@RequestHeader HttpHeaders headers, @RequestPart(value = "multipartFiles", required = false) List<MultipartFile> multipartFiles,
                                                                              @RequestPart(value = "boardDTO", required = true) BoardPostRequestDTO boardDTO) {
-
         String jwtToken = headers.get("token").toString();
         jwtToken = jwtToken.replace("[", "");
         jwtToken = jwtToken.replace("]", "");
@@ -58,11 +52,7 @@ public class BoardController {
 
     @ApiOperation(value = "전체 혹은 그룹별 최신글 리스트 조회", notes = "사용자가 가입되어 있는 그룹별로 게시글 리스트를 조회합니다.")
     @GetMapping("/groups/{groupId}")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "JWT TOKEN 이 들어갑니다.", required = true, dataType = "string", paramType = "header"),
-            @ApiImplicitParam(name = "groupId", value = "groupId 를 주세요. ( 0 이면 전체그룹, 그외 숫자는 그룹별 groupId)", required = true, dataTypeClass = Long.class, paramType = "path"),
-    })
-
+    @ApiImplicitParam(name = "groupId", value = "groupId 를 주세요. ( 0 이면 전체그룹, 그외 숫자는 그룹별 groupId)", required = true, dataTypeClass = Long.class, paramType = "path")
     public ResponseEntity<ResponseSuccessDTO<BoardListGetResponseDTO>> getBoardList(@RequestHeader HttpHeaders headers, @PathVariable Long groupId) {
 
         String jwtToken = headers.get("token").toString();
@@ -75,26 +65,23 @@ public class BoardController {
 
     @ApiOperation(value = "게시글 하나 조회", notes = "게시글 하나를 조회합니다.")
     @GetMapping("/{boardId}")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "JWT TOKEN 이 들어갑니다.", required = true, dataType = "string", paramType = "header"),
-            @ApiImplicitParam(name = "boardId", value = "boardId 를 주세요 ", required = true, dataTypeClass = Long.class, paramType = "path"),
-    })
+
+    @ApiImplicitParam(name = "boardId", value = "boardId 를 주세요 ", required = true, dataTypeClass = Long.class, paramType = "path")
     public ResponseEntity<ResponseSuccessDTO<BoardDTO>> getBoard(@RequestHeader HttpHeaders headers, @PathVariable(value = "boardId") Long boardId) {
 
         String jwtToken = headers.get("token").toString();
         jwtToken = jwtToken.replace("[", "");
         jwtToken = jwtToken.replace("]", "");
         String userId = authService.getUserId(jwtToken); //userId 가져와짐
-
+        //  String userId = headers.get("userId").toString();
         return ResponseEntity.ok(boardService.getOneBoard(userId, boardId));
     }
 
     @ApiOperation(value = "게시글 수정", notes = "게시글을 수정합니다.")
     @PutMapping("/{boardId}")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "JWT TOKEN 이 들어갑니다.", required = true, dataType = "string", paramType = "header"),
-            @ApiImplicitParam(name = "boardId", value = "boardId 를 주세요 ", required = true, dataTypeClass = Long.class, paramType = "path"),
-    })
+
+    @ApiImplicitParam(name = "boardId", value = "boardId 를 주세요 ", required = true, dataTypeClass = Long.class, paramType = "path")
+
 
     public ResponseEntity<ResponseSuccessDTO<String>> modifyBoard(@RequestHeader HttpHeaders headers, @RequestPart BoardModifyRequestDTO boardDTO, @PathVariable(value = "boardId") Long boardId) {
 
@@ -111,11 +98,8 @@ public class BoardController {
 
     @ApiOperation(value = "게시글 삭제", notes = "게시글을 삭제합니다.")
     @DeleteMapping("/{boardId}")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "JWT TOKEN 이 들어갑니다.", required = true, dataType = "string", paramType = "header"),
-            @ApiImplicitParam(name = "boardId", value = "boardId 를 주세요 ", required = true, dataTypeClass = Long.class, paramType = "path"),
-    })
-    @ApiImplicitParam(name = "token", value = "JWT TOKEN 을 담아주세요", required = true, dataType = "string", paramType = "header")
+
+    @ApiImplicitParam(name = "boardId", value = "boardId 를 주세요 ", required = true, dataTypeClass = Long.class, paramType = "path")
     public ResponseEntity<ResponseSuccessDTO<String>> deleteBoard(@RequestHeader HttpHeaders headers, @PathVariable(value = "boardId") Long boardId) {
 
         String jwtToken = headers.get("token").toString();

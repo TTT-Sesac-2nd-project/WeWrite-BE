@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class CommentDTO {
     private Long commentId;
     private String commentContent;
+    private Long isWriter;
 }

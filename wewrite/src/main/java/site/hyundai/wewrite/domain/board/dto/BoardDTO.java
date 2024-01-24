@@ -19,5 +19,6 @@ public class BoardDTO {
     private String boardLoc;
     private List<String> boardImageList;
     private String userImage;
+    private Long isWriter;
 
 }

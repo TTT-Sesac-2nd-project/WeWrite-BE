@@ -52,15 +52,20 @@ public class CommentService {
         return res;
     }
 
-    public ResponseSuccessDTO<CommentGetListResponseDTO> getCommentsByBoardId(Long boardId) {
+    public ResponseSuccessDTO<CommentGetListResponseDTO> getCommentsByBoardId(String userId, Long boardId) {
         if (boardId == null) {
             throw new BadVariableRequestException("boardId 가 NULL입니다.");
         }
         List<Comment> commentList = commentRepository.getCommentsByBoardId(boardId);
         List<CommentDTO> commentDTOList = new ArrayList<>();
+
+        // 수정 삭제 버튼 추가 로직
+
         for (Comment c : commentList) {
+            Long isWriter = c.getUser().getUserId().equals(userId) ? 1L : 0;
             CommentDTO commentDTO = CommentDTO.builder()
                     .commentId(c.getCommentId())
+                    .isWriter(isWriter)
                     .commentContent(c.getCommentContent()).build();
 
             commentDTOList.add(commentDTO);

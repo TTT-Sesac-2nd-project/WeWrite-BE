@@ -165,10 +165,13 @@ public class BoardService {
             throw new EntityNullException("게시글 ID 가 없습니다,");
         }
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new EntityNullException("게시글 " + boardId + " 이 DB에 없습니다."));
-        // 조회수 증가
+        // 조회수 증가 및 수정 여부 띄우기
+        Long isWriter = 1L;
         if (!userId.equals(board.getUser().getUserId())) {
             board.setBoardView(board.getBoardView() + 1);
+            isWriter = 0L;
         }
+
 
         List<String> boardImageStringList = new ArrayList<>();
         List<BoardImage> boardImageList = boardImageRepository.findAllByBoardId(boardId);
@@ -181,6 +184,7 @@ public class BoardService {
                 .userName(board.getUser().getUserName())
                 .boardLoc(board.getBoardLoc())
                 .userImage(board.getUser().getUserImage())
+                .isWriter(isWriter)
                 .boardImageList(boardImageStringList).build();
         ResponseSuccessDTO<BoardDTO> res = responseUtil.successResponse(boardDTO, HttpStatus.OK);
         return res;
