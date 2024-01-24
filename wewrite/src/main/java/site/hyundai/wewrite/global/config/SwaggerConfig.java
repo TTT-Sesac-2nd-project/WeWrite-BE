@@ -13,9 +13,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 @Configuration
@@ -27,26 +25,26 @@ public class SwaggerConfig implements WebMvcConfigurer {
 
         List<Parameter> parameterList = new ArrayList<>();
         return new Docket(DocumentationType.SWAGGER_2)
-                .consumes(getConsumeContentTypes())
-                .produces(getProduceContentTypes())
+//                .consumes(getConsumeContentTypes())
+//                .produces(getProduceContentTypes())
                 .select().apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
                 .build();
     }
 
-    private Set<String> getConsumeContentTypes() {
-        Set<String> consumes = new HashSet<>();
-        consumes.add("application/json;charset=UTF-8");
-        consumes.add("application/x-www-form-urlencoded");
-        consumes.add("multipart/form-data");
-        return consumes;
-    }
-
-    private Set<String> getProduceContentTypes() {
-        Set<String> produces = new HashSet<>();
-        produces.add("application/json;charset=UTF-8");
-        return produces;
-    }
+//    private Set<String> getConsumeContentTypes() {
+//        Set<String> consumes = new HashSet<>();
+//        consumes.add("application/json;charset=UTF-8");
+//        consumes.add("application/x-www-form-urlencoded");
+//        consumes.add("multipart/form-data");
+//        return consumes;
+//    }
+//
+//    private Set<String> getProduceContentTypes() {
+//        Set<String> produces = new HashSet<>();
+//        produces.add("application/json;charset=UTF-8");
+//        return produces;
+//    }
 
     private ApiKey apiKey() {
         return new ApiKey("Bearer +accessToken", "Authorization", "header");
