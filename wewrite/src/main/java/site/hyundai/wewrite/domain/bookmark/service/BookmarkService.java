@@ -1,20 +1,19 @@
 package site.hyundai.wewrite.domain.bookmark.service;
 
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import site.hyundai.wewrite.domain.board.dto.BoardListDTO;
 import site.hyundai.wewrite.domain.board.service.BoardService;
 import site.hyundai.wewrite.domain.board.service.GetBoardService;
 import site.hyundai.wewrite.domain.bookmark.dto.response.BookmarkResponseDTO;
 import site.hyundai.wewrite.domain.bookmark.repository.BookmarkRepository;
-import site.hyundai.wewrite.domain.entity.*;
+import site.hyundai.wewrite.domain.entity.Board;
+import site.hyundai.wewrite.domain.entity.Bookmark;
+import site.hyundai.wewrite.domain.entity.User;
 import site.hyundai.wewrite.global.dto.ResponseSuccessDTO;
 import site.hyundai.wewrite.global.util.ResponseUtil;
 
-import java.awt.print.Book;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

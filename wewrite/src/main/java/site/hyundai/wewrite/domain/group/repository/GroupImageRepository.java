@@ -8,4 +8,6 @@ import java.util.Optional;
 
 public interface GroupImageRepository extends JpaRepository<GroupImage, Long> {
     Optional<GroupImage> findByGroup(Group group);
+
+    void deleteByGroup(Group group);
 }

@@ -119,6 +119,7 @@ public class GroupService {
     }
 
     // 그룹 수정
+    @Transactional
     public ResponseSuccessDTO<String> updateGroup(Long groupId, GroupRequestDTO groupRequestDTO, Image image, User user) {
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new EntityNullException("해당 그룹이 없습니다. id=" + groupId));
         checkRole(group, user);
@@ -128,9 +129,9 @@ public class GroupService {
             group.setGroupName(groupRequestDTO.getGroupName());
             groupRepository.save(group);
         }
-
         // group_image 저장
         if(image != null){
+            groupImageRepository.deleteByGroup(group);
             groupImageRepository.save(new GroupImage(group, image));
         }
 
