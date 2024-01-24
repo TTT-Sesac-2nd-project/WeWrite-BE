@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.hyundai.wewrite.domain.auth.repository.UserRepository;
-import site.hyundai.wewrite.domain.board.dto.BoardListDTO;
 import site.hyundai.wewrite.domain.board.repository.BoardImageRepository;
 import site.hyundai.wewrite.domain.board.repository.BoardRepository;
 import site.hyundai.wewrite.domain.entity.Board;
@@ -41,54 +40,58 @@ public class MapService {
     private final UserGroupRepository userGroupRepository;
     private final ImageRepository imageRepository;
 
-    public ResponseSuccessDTO<MapListGetResponseDTO> getMapList(String userId , Long groupId){
-        if(userId==null){
+    public ResponseSuccessDTO<MapListGetResponseDTO> getMapList(String userId, Long groupId) {
+        if (userId == null) {
             throw new EntityNullException("유저 정보가 없습니다.");
         }
         List<List<Board>> totalBoardList = new ArrayList<>();
         List<Board> boardList = new ArrayList<>();
 
-        if(groupId==0){
-            List<UserGroup> userGroupList= userGroupRepository.getUserGroupsById(userId);
-            if(userGroupList==null){
+        if (groupId == 0) {
+            List<UserGroup> userGroupList = userGroupRepository.getUserGroupsById(userId);
+            if (userGroupList == null) {
                 throw new EntityNullException("유저가 가입한 그룹이 없습니다. 그룹에 가입하고 글을 작성해주세요");
             }
-            for(UserGroup u : userGroupList){
+            for (UserGroup u : userGroupList) {
                 boardList = boardRepository.getBoardList(u.getGroup().getGroupId());
                 totalBoardList.add(boardList);
             }
 
-        }
-        else {
+        } else {
             totalBoardList.add(boardRepository.getBoardList(groupId));
         }
 
-        User user = userRepository.findById(userId).orElseThrow(()-> new EntityNullException("유저 정보가 없습니다."));
+        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNullException("유저 정보가 없습니다."));
         List<MapBoardDTO> boardListDTOList = new ArrayList<>();
-        for(List<Board> bL : totalBoardList){
-            for(Board b : bL) {
+        for (List<Board> bL : totalBoardList) {
+            for (Board b : bL) {
                 Long boardImageId = boardImageRepository.findOneLatestImageByBoardId(b.getBoardId()).getImageId();
                 MapBoardDTO mapBoardDTO = MapBoardDTO.builder()
                         .boardId(b.getBoardId())
                         .boardImage(imageRepository.findById(boardImageId).get().getUploadFileUrl())
                         .boardLng(b.getBoardLong())
                         .boardLat(b.getBoardLat())
+                        .boardTitle(b.getBoardTitle())
+                        .boardContent(b.getBoardContent())
+                        .boardCreatedDate(timeService.parseLocalDateTimeForMap(b.getBoardCreatedDate()))
+                        .groupName(b.getGroup().getGroupName())
                         .build();
                 boardListDTOList.add(mapBoardDTO);
             }
         }
-        ResponseSuccessDTO<MapListGetResponseDTO>  res = responseUtil.successResponse(boardListDTOList,HttpStatus.OK);
-    return res;
+        ResponseSuccessDTO<MapListGetResponseDTO> res = responseUtil.successResponse(boardListDTOList, HttpStatus.OK);
+        return res;
     }
+
     public ResponseSuccessDTO<MapGetResponseDTO> getMap(Long boardId) {
-        if(boardId==null){
+        if (boardId == null) {
             throw new EntityNullException("boarId가 NULL입니다.");
         }
-    Board board = boardRepository.findById(boardId).orElseThrow(()-> new EntityNullException("게시글이 DB에 없습니다."));
-    Image image = boardImageRepository.findOneLatestImageByBoardId(boardId);
-    if(image==null){
-        throw new EntityNullException("image가 NULL입니다. 게시글에 필수로 넣어주세요");
-    }
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new EntityNullException("게시글이 DB에 없습니다."));
+        Image image = boardImageRepository.findOneLatestImageByBoardId(boardId);
+        if (image == null) {
+            throw new EntityNullException("image가 NULL입니다. 게시글에 필수로 넣어주세요");
+        }
         MapGetResponseDTO mapBoardDTO = MapGetResponseDTO.builder()
                 .boardTitle(board.getBoardTitle())
                 .boardContent(board.getBoardContent())
@@ -98,7 +101,7 @@ public class MapService {
                 .build();
 
 
-        ResponseSuccessDTO<MapGetResponseDTO>  res = responseUtil.successResponse(mapBoardDTO,HttpStatus.OK);
+        ResponseSuccessDTO<MapGetResponseDTO> res = responseUtil.successResponse(mapBoardDTO, HttpStatus.OK);
         return res;
     }
 }

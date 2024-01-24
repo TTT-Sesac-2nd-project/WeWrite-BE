@@ -1,11 +1,10 @@
-package site.hyundai.wewrite.domain.board.dto.response;
+package site.hyundai.wewrite.domain.comment.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import site.hyundai.wewrite.domain.board.dto.CommentDTO;
-import site.hyundai.wewrite.domain.entity.Comment;
+import site.hyundai.wewrite.domain.comment.dto.CommentDTO;
 
 import java.util.List;
 

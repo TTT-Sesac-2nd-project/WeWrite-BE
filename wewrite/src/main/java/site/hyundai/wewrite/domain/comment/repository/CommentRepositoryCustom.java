@@ -1,4 +1,4 @@
-package site.hyundai.wewrite.domain.board.repository;
+package site.hyundai.wewrite.domain.comment.repository;
 
 import site.hyundai.wewrite.domain.entity.Comment;
 

@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @AllArgsConstructor
@@ -21,6 +19,7 @@ public class BoardListDTO {
     private Long boardViewCount;
     private Long boardCommentCount;
     private String groupName;
+    private String userImage;
     private boolean isBookmarked;
 
 }
