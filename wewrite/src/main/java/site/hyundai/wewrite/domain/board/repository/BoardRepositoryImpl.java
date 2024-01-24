@@ -2,17 +2,18 @@ package site.hyundai.wewrite.domain.board.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
-import site.hyundai.wewrite.domain.board.repository.BoardRepositoryCustom;
 import site.hyundai.wewrite.domain.entity.Board;
 import site.hyundai.wewrite.domain.entity.QBoard;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
 import java.util.List;
 
 import static site.hyundai.wewrite.domain.entity.QBoard.board;
 
+/**
+ * @author 김동욱
+ */
 public class BoardRepositoryImpl extends QuerydslRepositorySupport implements BoardRepositoryCustom {
 
     @PersistenceContext

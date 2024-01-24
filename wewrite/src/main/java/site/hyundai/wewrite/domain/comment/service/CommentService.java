@@ -23,6 +23,9 @@ import site.hyundai.wewrite.global.util.ResponseUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author 김동욱
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j

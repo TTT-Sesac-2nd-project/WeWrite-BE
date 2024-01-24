@@ -14,6 +14,9 @@ import site.hyundai.wewrite.global.util.ResponseUtil;
 
 import java.util.List;
 
+/**
+ * @author 김동욱
+ */
 @Service
 @RequiredArgsConstructor
 public class UserService {

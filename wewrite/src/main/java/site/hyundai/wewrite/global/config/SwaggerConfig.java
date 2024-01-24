@@ -19,6 +19,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @author 김동욱
+ */
 
 @Configuration
 @EnableSwagger2
@@ -43,20 +46,6 @@ public class SwaggerConfig implements WebMvcConfigurer {
                 .securitySchemes(Arrays.asList(apiKey()));
 
     }
-
-//    private Set<String> getConsumeContentTypes() {
-//        Set<String> consumes = new HashSet<>();
-//        consumes.add("application/json;charset=UTF-8");
-//        consumes.add("application/x-www-form-urlencoded");
-//        consumes.add("multipart/form-data");
-//        return consumes;
-//    }
-//
-//    private Set<String> getProduceContentTypes() {
-//        Set<String> produces = new HashSet<>();
-//        produces.add("application/json;charset=UTF-8");
-//        return produces;
-//    }
 
     private ApiKey apiKey() {
         return new ApiKey("JWT", "token", "header");

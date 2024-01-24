@@ -31,6 +31,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @author 김동욱
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -78,20 +81,10 @@ public class BoardService {
                 .boardView(0L)
                 .build();
 
-//        Board board = new Board();
-//        board.setBoardTitle(boardDTO.getBoardTitle());
-//        board.setBoardLoc(boardDTO.getBoardLoc());
-//        board.setBoardContent(boardDTO.getBoardContent());
-//        board.setBoardCreatedDate(boardDTO.getBoardCreatedDate());
-//        board.setGroup(group);
-//        board.setUser(user);
-//        board.setBoardLat(boardDTO.getBoardLat());
-//        board.setBoardLong(boardDTO.getBoardLng());
-//        board.setBoardView(0L);
 
         boardRepository.save(board);
+        // 이미지 파일이 들어왔다면
         if (multipartFiles != null) {
-
 
             List<Image> imageList = uploaderService.uploadFiles("board", multipartFiles);
 
@@ -108,6 +101,7 @@ public class BoardService {
     }
 
     public ResponseSuccessDTO<BoardListGetResponseDTO> getBoardList(String userId, Long groupId) {
+
         if (userId == null) {
             throw new EntityNullException("유저 정보가 없습니다.");
         }
@@ -134,7 +128,6 @@ public class BoardService {
             for (Board b : bL) {
                 Long boardImageId = boardImageRepository.findOneLatestImageByBoardId(b.getBoardId()).getImageId();
                 Long commentCount = commentRepository.getCommentCountByBoardId(b.getBoardId());
-                log.info("DATE" + b.getCreatedAt().toString());
                 BoardListDTO boardListDTO = BoardListDTO.builder()
                         .boardId(b.getBoardId())
                         .boardTitle(b.getBoardTitle())

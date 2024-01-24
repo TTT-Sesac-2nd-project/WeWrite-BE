@@ -22,6 +22,10 @@ import site.hyundai.wewrite.global.dto.ResponseSuccessDTO;
 
 import java.util.List;
 
+
+/**
+ * @author 김동욱
+ */
 @RestController
 @RequestMapping("/board")
 @Slf4j

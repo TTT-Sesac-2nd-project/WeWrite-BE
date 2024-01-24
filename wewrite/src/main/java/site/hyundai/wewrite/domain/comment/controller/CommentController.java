@@ -16,6 +16,9 @@ import site.hyundai.wewrite.domain.comment.dto.response.CommentGetListResponseDT
 import site.hyundai.wewrite.domain.comment.service.CommentService;
 import site.hyundai.wewrite.global.dto.ResponseSuccessDTO;
 
+/**
+ * @author 김동욱
+ */
 @RestController
 @RequestMapping("/comment")
 @Slf4j

@@ -13,6 +13,9 @@ import site.hyundai.wewrite.domain.map.dto.response.MapListGetResponseDTO;
 import site.hyundai.wewrite.domain.map.service.MapService;
 import site.hyundai.wewrite.global.dto.ResponseSuccessDTO;
 
+/**
+ * @author 김동욱
+ */
 @RestController
 @RequestMapping("/map")
 @Slf4j

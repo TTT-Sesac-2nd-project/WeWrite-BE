@@ -15,6 +15,9 @@ import site.hyundai.wewrite.global.util.ResponseUtil;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
 
+/**
+ * @author 김동욱
+ */
 @Slf4j
 @RestControllerAdvice
 @RequiredArgsConstructor
