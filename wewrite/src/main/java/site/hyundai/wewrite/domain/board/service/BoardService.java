@@ -138,7 +138,6 @@ public class BoardService {
                         .boardLoc(b.getBoardLoc())
                         .boardImage(imageRepository.findById(boardImageId).get().getUploadFileUrl())
                         .userName(b.getUser().getUserName())
-                        .boardImage(b.getUser().getUserImage())
                         .boardViewCount(b.getBoardView())
                         .userImage(b.getUser().getUserImage())
                         .isBookmarked(bookmarkRepository.isBookmarked(userId, b.getBoardId()))
