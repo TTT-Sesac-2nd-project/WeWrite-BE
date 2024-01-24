@@ -1,5 +1,6 @@
 package site.hyundai.wewrite.domain.bookmark.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/bookmark")
 @RequiredArgsConstructor
+@Api(tags = {"북마크 API"})
 public class BookmarkController {
     private final BookmarkService bookmarkService;
     private final GetUserService getUserService;
