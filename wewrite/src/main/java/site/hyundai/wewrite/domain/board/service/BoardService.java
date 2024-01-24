@@ -229,7 +229,6 @@ public class BoardService {
                 .boardLoc(board.getBoardLoc())
                 .boardImage(imageRepository.findById(boardImageId).get().getUploadFileUrl())
                 .userName(board.getUser().getUserName())
-                .boardImage(board.getUser().getUserImage())
                 .userImage(board.getUser().getUserImage())
                 .boardViewCount(board.getBoardView())
                 .build();
