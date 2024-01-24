@@ -47,5 +47,4 @@ public class EmotionController {
     public ResponseEntity<ResponseSuccessDTO<String>> updateEmotion(@PathVariable Long boardId, @RequestBody EmotionRequestDTO requestDTO, @RequestHeader HttpHeaders headers) {
         return ResponseEntity.ok(emotionService.updateEmotion(boardId, requestDTO, getUserService.getUserByToken(headers)));
     }
-
 }

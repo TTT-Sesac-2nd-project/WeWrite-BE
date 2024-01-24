@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.hyundai.wewrite.domain.auth.service.GetUserService;
 import site.hyundai.wewrite.domain.board.service.GetBoardService;
 import site.hyundai.wewrite.domain.emotion.dto.request.EmotionRequestDTO;
 import site.hyundai.wewrite.domain.emotion.dto.response.EmotionResponseDTO;
@@ -29,10 +30,12 @@ public class EmotionService {
     private final ResponseUtil responseUtil;
     private final EmotionRepository emotionRepository;
     private final GetBoardService getBoardService;
+    private final GetUserService getUserService;
 
     // 공감 조회
     @Transactional(readOnly = true)
-    public ResponseSuccessDTO<EmotionResponseDTO> getEmotion(Long boardId, User user) {
+    public ResponseSuccessDTO<EmotionResponseDTO> getEmotion(Long boardId, String userId) {
+        User user = getUserService.getUserByUserId(userId);
         Board board = getBoardService.getBoardById(boardId);
         Emotion emotion = emotionRepository.findByBoardAndUser(board, user).orElse(null);
 
@@ -47,7 +50,8 @@ public class EmotionService {
 
     // 공감 등록 및 수정
     @Transactional
-    public ResponseSuccessDTO<String> updateEmotion(Long boardId, EmotionRequestDTO requestDTO, User user) {
+    public ResponseSuccessDTO<String> updateEmotion(Long boardId, EmotionRequestDTO requestDTO, String userId) {
+        User user = getUserService.getUserByUserId(userId);
         EmotionStatus emotionType = requestDTO.getEmotionType();
         Board board = getBoardService.getBoardById(boardId);
 

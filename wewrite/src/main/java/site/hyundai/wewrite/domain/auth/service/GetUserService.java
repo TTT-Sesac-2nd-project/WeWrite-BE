@@ -19,12 +19,16 @@ public class GetUserService {
     private final UserRepository userRepository;
     private final AuthService authService;
 
-    // token으로 유저 가져오기
-    public User getUserByToken(HttpHeaders headers){
+    // token으로 유저 id 가져오기
+    public String getUserByToken(HttpHeaders headers){
         String jwtToken = Objects.requireNonNull(headers.get("token")).toString();
         jwtToken= jwtToken.replace("[","");
         jwtToken= jwtToken.replace("]","");
-        String userId = authService.getUserId(jwtToken);
+        return authService.getUserId(jwtToken);
+    }
+
+    // userId로 유저 가져오기
+    public User getUserByUserId(String userId){
         return  userRepository.findById(userId).orElseThrow(
                 () -> new EntityNullException("User not found"));
     }
