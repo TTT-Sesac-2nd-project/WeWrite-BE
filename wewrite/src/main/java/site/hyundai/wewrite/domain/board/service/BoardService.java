@@ -14,6 +14,7 @@ import site.hyundai.wewrite.domain.board.dto.request.BoardPostRequestDTO;
 import site.hyundai.wewrite.domain.board.dto.response.BoardListGetResponseDTO;
 import site.hyundai.wewrite.domain.board.dto.response.BoardPostResponseDTO;
 import site.hyundai.wewrite.domain.board.repository.BoardImageRepository;
+import site.hyundai.wewrite.domain.board.repository.BoardListRepository;
 import site.hyundai.wewrite.domain.board.repository.BoardRepository;
 import site.hyundai.wewrite.domain.bookmark.repository.BookmarkRepository;
 import site.hyundai.wewrite.domain.comment.repository.CommentRepository;
@@ -27,6 +28,8 @@ import site.hyundai.wewrite.global.exeception.service.EntityNullException;
 import site.hyundai.wewrite.global.util.ResponseUtil;
 import site.hyundai.wewrite.global.util.TimeService;
 
+import javax.persistence.Tuple;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -58,6 +61,7 @@ public class BoardService {
     private final BookmarkRepository bookmarkRepository;
 
     private final TimeService timeService;
+    private final BoardListRepository boardListRepository;
 
     @Transactional
     public ResponseSuccessDTO<BoardPostResponseDTO> addBoard(String userId, BoardPostRequestDTO boardDTO, List<MultipartFile> multipartFiles) {
@@ -100,54 +104,81 @@ public class BoardService {
         return res;
     }
 
+//    public ResponseSuccessDTO<BoardListGetResponseDTO> getBoardList(String userId, Long groupId) {
+//
+//        if (userId == null) {
+//            throw new EntityNullException("유저 정보가 없습니다.");
+//        }
+//        List<List<Board>> totalBoardList = new ArrayList<>();
+//        List<Board> boardList = new ArrayList<>();
+//
+//        if (groupId == 0) {
+//            List<UserGroup> userGroupList = userGroupRepository.getUserGroupsById(userId);
+//            if (userGroupList == null) {
+//                throw new EntityNullException("유저가 가입한 그룹이 없습니다. 그룹에 가입하고 글을 작성해주세요");
+//            }
+//            for (UserGroup u : userGroupList) {
+//                boardList = boardRepository.getBoardList(u.getGroup().getGroupId());
+//                totalBoardList.add(boardList);
+//            }
+//
+//        } else {
+//            totalBoardList.add(boardRepository.getBoardList(groupId));
+//        }
+//
+//        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNullException("유저 정보가 없습니다."));
+//        List<BoardListDTO> boardListDTOList = new ArrayList<>();
+//        for (List<Board> bL : totalBoardList) {
+//            for (Board b : bL) {
+//                Long boardImageId = boardImageRepository.findOneLatestImageByBoardId(b.getBoardId()).getImageId();
+//                Long commentCount = commentRepository.getCommentCountByBoardId(b.getBoardId());
+//                BoardListDTO boardListDTO = BoardListDTO.builder()
+//                        .boardId(b.getBoardId())
+//                        .boardTitle(b.getBoardTitle())
+//                        .boardCreatedDate(timeService.parseLocalDateTimeForMap(b.getBoardCreatedDate()))
+//                        .userName(b.getUser().getUserName())
+//                        .groupName(b.getGroup().getGroupName())
+//                        .boardCommentCount(commentCount)
+//                        .boardLoc(b.getBoardLoc())
+//                        .boardImage(imageRepository.findById(boardImageId).get().getUploadFileUrl())
+//                        .userName(b.getUser().getUserName())
+//                        .boardViewCount(b.getBoardView())
+//                        .userImage(b.getUser().getUserImage())
+//                        .isBookmarked(bookmarkRepository.isBookmarked(userId, b.getBoardId()))
+//                        .build();
+//                boardListDTOList.add(boardListDTO);
+//            }
+//        }
+//        BoardListGetResponseDTO boardListGetResponseDTO = new BoardListGetResponseDTO();
+//        boardListGetResponseDTO.setBoardList(boardListDTOList);
+//        ResponseSuccessDTO<BoardListGetResponseDTO> res = responseUtil.successResponse(boardListGetResponseDTO, HttpStatus.OK);
+//        return res;
+//    }
+
     public ResponseSuccessDTO<BoardListGetResponseDTO> getBoardList(String userId, Long groupId) {
 
         if (userId == null) {
             throw new EntityNullException("유저 정보가 없습니다.");
         }
-        List<List<Board>> totalBoardList = new ArrayList<>();
-        List<Board> boardList = new ArrayList<>();
-
-        if (groupId == 0) {
-            List<UserGroup> userGroupList = userGroupRepository.getUserGroupsById(userId);
-            if (userGroupList == null) {
-                throw new EntityNullException("유저가 가입한 그룹이 없습니다. 그룹에 가입하고 글을 작성해주세요");
-            }
-            for (UserGroup u : userGroupList) {
-                boardList = boardRepository.getBoardList(u.getGroup().getGroupId());
-                totalBoardList.add(boardList);
-            }
-
-        } else {
-            totalBoardList.add(boardRepository.getBoardList(groupId));
+        List<Tuple> tuples = boardListRepository.getPopularBoards(groupId);
+        List<BoardListDTO> result = new ArrayList<>();
+        for (Tuple tuple : tuples) {
+            BoardListDTO dto = new BoardListDTO();
+            dto.setBoardId(tuple.get("board_id", BigDecimal.class).longValue());
+            dto.setBoardTitle(tuple.get("board_title", String.class));
+            dto.setUserName(tuple.get("user_name", String.class));
+            dto.setBoardLoc(tuple.get("board_loc", String.class));
+            dto.setBoardImage(tuple.get("board_image", String.class));
+            dto.setBoardCreatedDate(tuple.get("board_created_date", String.class));
+            dto.setBoardViewCount(tuple.get("board_view_count", BigDecimal.class).longValue());
+            dto.setBoardCommentCount(tuple.get("board_comment_count", BigDecimal.class).longValue());
+            dto.setGroupName(tuple.get("group_name", String.class));
+            dto.setUserImage(tuple.get("user_image", String.class));
+            dto.setBookmarked(tuple.get("is_bookmarked", Character.class) == 'Y' || tuple.get("is_bookmarked", Character.class) == 'y');
+            result.add(dto);
         }
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNullException("유저 정보가 없습니다."));
-        List<BoardListDTO> boardListDTOList = new ArrayList<>();
-        for (List<Board> bL : totalBoardList) {
-            for (Board b : bL) {
-                Long boardImageId = boardImageRepository.findOneLatestImageByBoardId(b.getBoardId()).getImageId();
-                Long commentCount = commentRepository.getCommentCountByBoardId(b.getBoardId());
-                BoardListDTO boardListDTO = BoardListDTO.builder()
-                        .boardId(b.getBoardId())
-                        .boardTitle(b.getBoardTitle())
-                        .boardCreatedDate(timeService.parseLocalDateTimeForMap(b.getBoardCreatedDate()))
-                        .userName(b.getUser().getUserName())
-                        .groupName(b.getGroup().getGroupName())
-                        .boardCommentCount(commentCount)
-                        .boardLoc(b.getBoardLoc())
-                        .boardImage(imageRepository.findById(boardImageId).get().getUploadFileUrl())
-                        .userName(b.getUser().getUserName())
-                        .boardViewCount(b.getBoardView())
-                        .userImage(b.getUser().getUserImage())
-                        .isBookmarked(bookmarkRepository.isBookmarked(userId, b.getBoardId()))
-                        .build();
-                boardListDTOList.add(boardListDTO);
-            }
-        }
-        BoardListGetResponseDTO boardListGetResponseDTO = new BoardListGetResponseDTO();
-        boardListGetResponseDTO.setBoardList(boardListDTOList);
-        ResponseSuccessDTO<BoardListGetResponseDTO> res = responseUtil.successResponse(boardListGetResponseDTO, HttpStatus.OK);
+        ResponseSuccessDTO<BoardListGetResponseDTO> res = responseUtil.successResponse(result, HttpStatus.OK);
         return res;
     }
 
