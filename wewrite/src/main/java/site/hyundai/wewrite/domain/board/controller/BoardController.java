@@ -70,7 +70,7 @@ public class BoardController {
     @ApiImplicitParam(name = "boardId", value = "boardId 를 주세요 ", required = true, dataTypeClass = Long.class, paramType = "path")
 
 
-    public ResponseEntity<ResponseSuccessDTO<String>> modifyBoard(@RequestHeader HttpHeaders headers, @RequestPart BoardModifyRequestDTO boardDTO, @PathVariable(value = "boardId") Long boardId) {
+    public ResponseEntity<ResponseSuccessDTO<String>> modifyBoard(@RequestHeader HttpHeaders headers, @RequestBody BoardModifyRequestDTO boardDTO, @PathVariable(value = "boardId") Long boardId) {
 
         return ResponseEntity.ok(boardService.modifyBoard(boardDTO, boardId));
     }
