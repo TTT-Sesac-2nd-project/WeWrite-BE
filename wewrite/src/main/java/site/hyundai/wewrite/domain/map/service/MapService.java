@@ -24,6 +24,8 @@ import site.hyundai.wewrite.global.util.ResponseUtil;
 import site.hyundai.wewrite.global.util.TimeService;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -47,7 +49,7 @@ public class MapService {
         if (userId == null) {
             throw new EntityNullException("유저 정보가 없습니다.");
         }
-        List<List<Board>> totalBoardList = new ArrayList<>();
+        List<Board> totalBoardList = new ArrayList<>();
         List<Board> boardList = new ArrayList<>();
 
         if (groupId == 0) {
@@ -57,30 +59,36 @@ public class MapService {
             }
             for (UserGroup u : userGroupList) {
                 boardList = boardRepository.getBoardList(u.getGroup().getGroupId());
-                totalBoardList.add(boardList);
+                for (Board b : boardList) {
+                    totalBoardList.add(b);
+                }
+
             }
 
         } else {
-            totalBoardList.add(boardRepository.getBoardList(groupId));
+            boardList = boardRepository.getBoardList(groupId);
+            for (Board b : boardList) {
+                totalBoardList.add(b);
+            }
         }
-
+        Collections.sort(totalBoardList, Comparator.comparing(Board::getBoardCreatedDate));
         User user = userRepository.findById(userId).orElseThrow(() -> new EntityNullException("유저 정보가 없습니다."));
         List<MapBoardDTO> boardListDTOList = new ArrayList<>();
-        for (List<Board> bL : totalBoardList) {
-            for (Board b : bL) {
-                Long boardImageId = boardImageRepository.findOneLatestImageByBoardId(b.getBoardId()).getImageId();
-                MapBoardDTO mapBoardDTO = MapBoardDTO.builder()
-                        .boardId(b.getBoardId())
-                        .boardImage(imageRepository.findById(boardImageId).get().getUploadFileUrl())
-                        .boardLng(b.getBoardLong())
-                        .boardLat(b.getBoardLat())
-                        .boardTitle(b.getBoardTitle())
-                        .boardContent(b.getBoardContent())
-                        .boardCreatedDate(timeService.parseLocalDateTimeForMap(b.getBoardCreatedDate()))
-                        .groupName(b.getGroup().getGroupName())
-                        .build();
-                boardListDTOList.add(mapBoardDTO);
-            }
+        for (Board b : totalBoardList) {
+
+            Long boardImageId = boardImageRepository.findOneLatestImageByBoardId(b.getBoardId()).getImageId();
+            MapBoardDTO mapBoardDTO = MapBoardDTO.builder()
+                    .boardId(b.getBoardId())
+                    .boardImage(imageRepository.findById(boardImageId).get().getUploadFileUrl())
+                    .boardLng(b.getBoardLong())
+                    .boardLat(b.getBoardLat())
+                    .boardTitle(b.getBoardTitle())
+                    .boardContent(b.getBoardContent())
+                    .boardCreatedDate(timeService.parseLocalDateTimeForMap(b.getBoardCreatedDate()))
+                    .groupName(b.getGroup().getGroupName())
+                    .build();
+            boardListDTOList.add(mapBoardDTO);
+
         }
         ResponseSuccessDTO<MapListGetResponseDTO> res = responseUtil.successResponse(boardListDTOList, HttpStatus.OK);
         return res;

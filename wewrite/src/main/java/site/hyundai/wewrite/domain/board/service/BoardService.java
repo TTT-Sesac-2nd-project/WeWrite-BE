@@ -109,7 +109,7 @@ public class BoardService {
 //        if (userId == null) {
 //            throw new EntityNullException("유저 정보가 없습니다.");
 //        }
-//        List<List<Board>> totalBoardList = new ArrayList<>();
+//        List<Board> totalBoardList = new ArrayList<>();
 //        List<Board> boardList = new ArrayList<>();
 //
 //        if (groupId == 0) {
@@ -119,35 +119,41 @@ public class BoardService {
 //            }
 //            for (UserGroup u : userGroupList) {
 //                boardList = boardRepository.getBoardList(u.getGroup().getGroupId());
-//                totalBoardList.add(boardList);
+//                for (Board b : boardList) {
+//                    totalBoardList.add(b);
+//                }
+//
 //            }
 //
 //        } else {
-//            totalBoardList.add(boardRepository.getBoardList(groupId));
+//            boardList = boardRepository.getBoardList(groupId);
+//            for (Board b : boardList) {
+//                totalBoardList.add(b);
+//            }
 //        }
-//
+//        Collections.sort(totalBoardList, Comparator.comparing(Board::getBoardCreatedDate));
 //        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNullException("유저 정보가 없습니다."));
 //        List<BoardListDTO> boardListDTOList = new ArrayList<>();
-//        for (List<Board> bL : totalBoardList) {
-//            for (Board b : bL) {
-//                Long boardImageId = boardImageRepository.findOneLatestImageByBoardId(b.getBoardId()).getImageId();
-//                Long commentCount = commentRepository.getCommentCountByBoardId(b.getBoardId());
-//                BoardListDTO boardListDTO = BoardListDTO.builder()
-//                        .boardId(b.getBoardId())
-//                        .boardTitle(b.getBoardTitle())
-//                        .boardCreatedDate(timeService.parseLocalDateTimeForMap(b.getBoardCreatedDate()))
-//                        .userName(b.getUser().getUserName())
-//                        .groupName(b.getGroup().getGroupName())
-//                        .boardCommentCount(commentCount)
-//                        .boardLoc(b.getBoardLoc())
-//                        .boardImage(imageRepository.findById(boardImageId).get().getUploadFileUrl())
-//                        .userName(b.getUser().getUserName())
-//                        .boardViewCount(b.getBoardView())
-//                        .userImage(b.getUser().getUserImage())
-//                        .isBookmarked(bookmarkRepository.isBookmarked(userId, b.getBoardId()))
-//                        .build();
-//                boardListDTOList.add(boardListDTO);
-//            }
+//        for (Board b : totalBoardList) {
+//
+//            Long boardImageId = boardImageRepository.findOneLatestImageByBoardId(b.getBoardId()).getImageId();
+//            Long commentCount = commentRepository.getCommentCountByBoardId(b.getBoardId());
+//            BoardListDTO boardListDTO = BoardListDTO.builder()
+//                    .boardId(b.getBoardId())
+//                    .boardTitle(b.getBoardTitle())
+//                    .boardCreatedDate(timeService.parseLocalDateTimeForMap(b.getBoardCreatedDate()))
+//                    .userName(b.getUser().getUserName())
+//                    .groupName(b.getGroup().getGroupName())
+//                    .boardCommentCount(commentCount)
+//                    .boardLoc(b.getBoardLoc())
+//                    .boardImage(imageRepository.findById(boardImageId).get().getUploadFileUrl())
+//                    .userName(b.getUser().getUserName())
+//                    .boardViewCount(b.getBoardView())
+//                    .userImage(b.getUser().getUserImage())
+//                    .isBookmarked(bookmarkRepository.isBookmarked(userId, b.getBoardId()))
+//                    .build();
+//            boardListDTOList.add(boardListDTO);
+//
 //        }
 //        BoardListGetResponseDTO boardListGetResponseDTO = new BoardListGetResponseDTO();
 //        boardListGetResponseDTO.setBoardList(boardListDTOList);
