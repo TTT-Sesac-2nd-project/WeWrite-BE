@@ -52,7 +52,6 @@ public class BoardController {
     @GetMapping("/groups/{groupId}")
     @ApiImplicitParam(name = "groupId", value = "groupId 를 주세요. ( 0 이면 전체그룹, 그외 숫자는 그룹별 groupId)", required = true, dataTypeClass = Long.class, paramType = "path")
     public ResponseEntity<ResponseSuccessDTO<BoardListGetResponseDTO>> getBoardList(@RequestHeader HttpHeaders headers, @PathVariable Long groupId) {
-
         return ResponseEntity.ok(boardService.getBoardList(getUserService.getUserByToken(headers), groupId));
     }
 
