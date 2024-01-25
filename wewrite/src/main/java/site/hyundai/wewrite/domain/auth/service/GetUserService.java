@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import site.hyundai.wewrite.domain.auth.repository.UserRepository;
 import site.hyundai.wewrite.domain.entity.User;
 import site.hyundai.wewrite.global.exeception.service.EntityNullException;
+import site.hyundai.wewrite.global.exeception.service.UnAuthorizedException;
 
 import java.util.Objects;
 
@@ -27,7 +28,7 @@ public class GetUserService {
             jwtToken = jwtToken.replace("]", "");
             return authService.getUserId(jwtToken);
         } catch (NullPointerException e) {
-            throw new EntityNullException("토큰이 NULL(로그인 후 사용해주세요)");
+            throw new UnAuthorizedException("토큰이 NULL(로그인 후 사용해주세요)");
         }
 
 
