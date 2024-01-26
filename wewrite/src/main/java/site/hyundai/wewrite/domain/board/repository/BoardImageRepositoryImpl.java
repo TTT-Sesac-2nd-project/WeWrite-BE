@@ -15,18 +15,16 @@ import java.util.List;
  */
 public class BoardImageRepositoryImpl extends QuerydslRepositorySupport implements BoardImageRepositoryCustom {
 
+    private final JPAQueryFactory queryFactory;
     @PersistenceContext
     EntityManager em;
-
-    private final JPAQueryFactory queryFactory;
+    QBoardImage boardImage = QBoardImage.boardImage;
 
     public BoardImageRepositoryImpl(EntityManager em) {
         super(BoardImage.class);
         this.queryFactory = new JPAQueryFactory(em);
 
     }
-
-    QBoardImage boardImage = QBoardImage.boardImage;
 
     @Override
     public List<BoardImage> findAllByBoardId(Long boardId) {
@@ -41,7 +39,7 @@ public class BoardImageRepositoryImpl extends QuerydslRepositorySupport implemen
         return queryFactory.select(boardImage.image)
                 .from(boardImage)
                 .where(boardImage.board.boardId.eq(boardId))
-                .orderBy(boardImage.image.imageId.desc())
+                .orderBy(boardImage.image.imageId.asc())
                 .fetchFirst();
     }
 }

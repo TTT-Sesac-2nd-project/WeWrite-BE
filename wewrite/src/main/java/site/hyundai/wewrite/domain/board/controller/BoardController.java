@@ -41,7 +41,7 @@ public class BoardController {
     @PostMapping(value = "/", consumes = {MediaType.APPLICATION_JSON_VALUE,
             MediaType.MULTIPART_FORM_DATA_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "게시글 작성", notes = "게시글을 작성합니다.")
-    @ApiImplicitParam(name = "boardDTO", value = "boardDTO 를 담아주세요", required = true, dataTypeClass = BoardDTO.class, paramType = "string")
+    @ApiImplicitParam(name = "boardDTO", value = "boardDTO 를 담아주세요 Request : (application/json , multipart/formdata) 로 보내주세요", required = true, dataTypeClass = BoardDTO.class, paramType = "string")
     public ResponseEntity<ResponseSuccessDTO<BoardPostResponseDTO>> addBoard(@RequestHeader HttpHeaders headers, @RequestPart(value = "multipartFiles", required = false) List<MultipartFile> multipartFiles,
                                                                              @RequestPart(value = "boardDTO", required = true) BoardPostRequestDTO boardDTO) {
 
