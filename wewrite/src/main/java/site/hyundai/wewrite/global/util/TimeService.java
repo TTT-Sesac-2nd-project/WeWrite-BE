@@ -3,7 +3,9 @@ package site.hyundai.wewrite.global.util;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -58,9 +60,10 @@ public class TimeService {
     //"2022-01-23T14:45:30" 으로 주셈
     public LocalDateTime parseStringDateTimeForMap(String localDateTime) {
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        LocalDate localDate = LocalDate.parse(localDateTime, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-        return LocalDateTime.parse(localDateTime, formatter);
+
+        return localDate.atTime(LocalTime.MIDNIGHT);
 
     }
 
