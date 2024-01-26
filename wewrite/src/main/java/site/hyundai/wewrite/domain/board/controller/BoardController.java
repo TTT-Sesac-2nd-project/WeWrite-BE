@@ -2,6 +2,7 @@ package site.hyundai.wewrite.domain.board.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,7 +51,10 @@ public class BoardController {
 
     @ApiOperation(value = "전체 혹은 그룹별 최신글 리스트 조회", notes = "사용자가 가입되어 있는 그룹별로 게시글 리스트를 조회합니다.")
     @GetMapping("/groups/{groupId}")
-    @ApiImplicitParam(name = "groupId", value = "groupId 를 주세요. ( 0 이면 전체그룹, 그외 숫자는 그룹별 groupId)", required = true, dataTypeClass = Long.class, paramType = "path")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "groupId", value = "groupId 를 주세요. ( 0 이면 전체그룹, 그외 숫자는 그룹별 groupId)", required = true, dataTypeClass = Long.class, paramType = "path"),
+            @ApiImplicitParam(name = "sortedType", value = "sortedType 를 주세요. (recent(최신순), popularity(인기순))", required = true)
+    })
     public ResponseEntity<ResponseSuccessDTO<BoardListGetResponseDTO>> getBoardList(@RequestHeader HttpHeaders headers, @PathVariable Long groupId, @RequestParam String sortedType) {
         return ResponseEntity.ok(boardService.getBoardList(getUserService.getUserByToken(headers), groupId, sortedType));
     }
