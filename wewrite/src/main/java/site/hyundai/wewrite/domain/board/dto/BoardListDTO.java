@@ -20,6 +20,6 @@ public class BoardListDTO {
     private Long boardCommentCount;
     private String groupName;
     private String userImage;
-    private boolean isBookmarked;
+    private Long isBookmarked;
 }
 
