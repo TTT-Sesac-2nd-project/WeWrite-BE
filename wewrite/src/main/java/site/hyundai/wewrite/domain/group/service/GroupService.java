@@ -74,7 +74,7 @@ public class GroupService {
         String groupImageUrl = (groupImage != null) ? groupImage.getImage().getUploadFileUrl() : null;
         GroupDetailResponseDTO groupDetailResponseDTO = new GroupDetailResponseDTO(group, groupImageUrl);
         // 글 불러오기
-        ResponseSuccessDTO<BoardListGetResponseDTO> boardListResponse = boardService.getBoardList(user.getUserId(), groupId);
+        ResponseSuccessDTO<BoardListGetResponseDTO> boardListResponse = boardService.getBoardList(user.getUserId(), groupId, "recent");
         groupDetailResponseDTO.setBoardList(boardListResponse.getData().getBoardList());
         return responseUtil.successResponse(groupDetailResponseDTO, HttpStatus.OK);
     }

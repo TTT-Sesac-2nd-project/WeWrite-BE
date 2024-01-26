@@ -1,7 +1,6 @@
 package site.hyundai.wewrite.domain.group.controller;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,7 +52,6 @@ public class GroupController {
     // 그룹 페이지 조회
     @ApiOperation(value = "그룹 페이지 조회", notes = "그룹 페이지 조회")
     @GetMapping("/{groupId}")
-    @ApiImplicitParam(name = "groupId", value = "조회할 그룹 id",required = true)
     public ResponseEntity<ResponseSuccessDTO<GroupDetailResponseDTO>> getDetailGroup(@PathVariable Long groupId, @RequestHeader HttpHeaders headers) {
         return ResponseEntity.ok(groupService.getDetailGroup(groupId, getUserService.getUserByToken(headers)));
     }
@@ -75,7 +73,6 @@ public class GroupController {
     // 그룹 수정
     @ApiOperation(value = "그룹 수정", notes = "그룹 수정")
     @PatchMapping("/{groupId}")
-    @ApiImplicitParam(name = "groupId", value = "수정할 그룹 id",required = true)
     public ResponseEntity<ResponseSuccessDTO<String>> updateGroup(@PathVariable Long groupId, GroupRequestDTO groupRequestDTO, @RequestHeader HttpHeaders headers) {
         List<Image> images = null;
         if(groupRequestDTO.getGroupImage() != null){
@@ -93,7 +90,6 @@ public class GroupController {
     // 그룹 삭제
     @ApiOperation(value = "그룹 삭제", notes = "그룹 삭제")
     @DeleteMapping("/{groupId}")
-    @ApiImplicitParam(name = "groupId", value = "삭제할 그룹 id",required = true)
     public ResponseEntity<ResponseSuccessDTO<String>> deleteGroup(@PathVariable Long groupId, @RequestHeader HttpHeaders headers) {
         return ResponseEntity.ok(groupService.deleteGroup(groupId, getUserService.getUserByToken(headers)));
     }
@@ -101,7 +97,6 @@ public class GroupController {
     // 그룹 탈퇴
     @ApiOperation(value = "그룹 탈퇴", notes = "그룹 탈퇴")
     @DeleteMapping("/leave/{groupId}")
-    @ApiImplicitParam(name = "groupId", value = "탈퇴할 그룹 id",required = true)
     public ResponseEntity<ResponseSuccessDTO<String>> leaveGroup(@PathVariable Long groupId, @RequestHeader HttpHeaders headers) {
         return ResponseEntity.ok(groupService.leaveGroup(groupId, getUserService.getUserByToken(headers)));
     }
