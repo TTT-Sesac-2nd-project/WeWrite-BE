@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import site.hyundai.wewrite.domain.auth.service.GetUserService;
 import site.hyundai.wewrite.domain.entity.Image;
+import site.hyundai.wewrite.domain.group.dto.request.GroupCodeRequestDTO;
 import site.hyundai.wewrite.domain.group.dto.request.GroupRequestDTO;
 import site.hyundai.wewrite.domain.group.dto.response.GroupDetailResponseDTO;
 import site.hyundai.wewrite.domain.group.dto.response.GroupResponseDTO;
@@ -67,8 +68,8 @@ public class GroupController {
     // 초대코드로 그룹 가입하기
     @ApiOperation(value = "초대코드로 그룹 가입하기", notes = "초대코드로 그룹 가입하기")
     @PostMapping("/join")
-    public ResponseEntity<ResponseSuccessDTO<String>> joinGroup(@RequestBody GroupRequestDTO groupRequestDTO, @RequestHeader HttpHeaders headers) {
-        return ResponseEntity.ok(groupService.joinGroup(groupRequestDTO.getGroupCode(), getUserService.getUserByToken(headers)));
+    public ResponseEntity<ResponseSuccessDTO<String>> joinGroup(@RequestBody GroupCodeRequestDTO groupCodeRequestDTO, @RequestHeader HttpHeaders headers) {
+        return ResponseEntity.ok(groupService.joinGroup(groupCodeRequestDTO.getGroupCode(), getUserService.getUserByToken(headers)));
     }
 
     // 그룹 수정

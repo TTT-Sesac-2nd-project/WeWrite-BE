@@ -18,10 +18,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GroupRequestDTO {
-    @ApiParam(value = "그룹 이름")
+    @ApiParam(value = "그룹 이름", required = true)
     private String groupName;
-    @ApiParam(value = "그룹 코드")
-    private String groupCode;
     @ApiParam(value = "그룹 이미지")
     List<MultipartFile> groupImage;
 }
