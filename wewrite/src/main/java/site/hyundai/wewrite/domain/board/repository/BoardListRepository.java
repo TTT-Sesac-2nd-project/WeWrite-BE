@@ -11,8 +11,8 @@ import java.util.List;
 @Repository
 public interface BoardListRepository extends JpaRepository<Board, Long> {
 
-    @Query(value = "SELECT * FROM TABLE(BOARD_PACKAGE.GET_POPULAR_BOARDS(:p_group_id))", nativeQuery = true)
-    List<Tuple> getPopularBoards(@Param("p_group_id") Long groupId);
+    @Query(value = "SELECT * FROM TABLE(BOARD_PACKAGE.GET_POPULAR_BOARDS(:p_group_id, :p_sorted_type))", nativeQuery = true)
+    List<Tuple> getPopularBoards(@Param("p_group_id") Long groupId, @Param("p_sorted_type") String sortedType);
 
 }
 

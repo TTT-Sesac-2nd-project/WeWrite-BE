@@ -51,8 +51,8 @@ public class BoardController {
     @ApiOperation(value = "전체 혹은 그룹별 최신글 리스트 조회", notes = "사용자가 가입되어 있는 그룹별로 게시글 리스트를 조회합니다.")
     @GetMapping("/groups/{groupId}")
     @ApiImplicitParam(name = "groupId", value = "groupId 를 주세요. ( 0 이면 전체그룹, 그외 숫자는 그룹별 groupId)", required = true, dataTypeClass = Long.class, paramType = "path")
-    public ResponseEntity<ResponseSuccessDTO<BoardListGetResponseDTO>> getBoardList(@RequestHeader HttpHeaders headers, @PathVariable Long groupId) {
-        return ResponseEntity.ok(boardService.getBoardList(getUserService.getUserByToken(headers), groupId));
+    public ResponseEntity<ResponseSuccessDTO<BoardListGetResponseDTO>> getBoardList(@RequestHeader HttpHeaders headers, @PathVariable Long groupId, @RequestParam String sortedType) {
+        return ResponseEntity.ok(boardService.getBoardList(getUserService.getUserByToken(headers), groupId, sortedType));
     }
 
     @ApiOperation(value = "게시글 하나 조회", notes = "게시글 하나를 조회합니다.")

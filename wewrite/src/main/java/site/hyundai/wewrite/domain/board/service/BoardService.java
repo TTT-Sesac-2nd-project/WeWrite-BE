@@ -163,12 +163,11 @@ public class BoardService {
 //        return res;
 //    }
 
-    public ResponseSuccessDTO<BoardListGetResponseDTO> getBoardList(String userId, Long groupId) {
-
+    public ResponseSuccessDTO<BoardListGetResponseDTO> getBoardList(String userId, Long groupId, String sortedType) {
         if (userId == null) {
             throw new EntityNullException("유저 정보가 없습니다.");
         }
-        List<Tuple> tuples = boardListRepository.getPopularBoards(groupId);
+        List<Tuple> tuples = boardListRepository.getPopularBoards(groupId, sortedType);
         List<BoardListDTO> boardListDTOList = new ArrayList<>();
         for (Tuple tuple : tuples) {
             BoardListDTO dto = new BoardListDTO();
