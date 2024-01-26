@@ -9,6 +9,7 @@ import site.hyundai.wewrite.domain.auth.repository.UserRepository;
 import site.hyundai.wewrite.domain.board.repository.BoardRepository;
 import site.hyundai.wewrite.domain.comment.dto.CommentDTO;
 import site.hyundai.wewrite.domain.comment.dto.request.CommentRequestDTO;
+import site.hyundai.wewrite.domain.comment.dto.response.CommentDetailDTO;
 import site.hyundai.wewrite.domain.comment.dto.response.CommentGetListResponseDTO;
 import site.hyundai.wewrite.domain.comment.repository.CommentRepository;
 import site.hyundai.wewrite.domain.entity.Board;
@@ -109,15 +110,15 @@ public class CommentService {
         return res;
     }
 
-    public ResponseSuccessDTO<CommentDTO> getComment(Long commentId) {
+    public ResponseSuccessDTO<CommentDetailDTO> getComment(Long commentId) {
         if (commentId == null) {
             throw new EntityNullException("댓글 ID 가 없습니다.");
         }
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new EntityNullException("댓글이 DB에 없습니다."));
-        CommentDTO commentDTO = CommentDTO.builder()
+        CommentDetailDTO commentDTO = CommentDetailDTO.builder()
                 .commentId(comment.getCommentId())
                 .commentContent(comment.getCommentContent()).build();
-        ResponseSuccessDTO<CommentDTO> res = responseUtil.successResponse(commentDTO, HttpStatus.OK);
+        ResponseSuccessDTO<CommentDetailDTO> res = responseUtil.successResponse(commentDTO, HttpStatus.OK);
 
         return res;
     }

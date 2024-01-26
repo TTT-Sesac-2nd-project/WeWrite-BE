@@ -10,8 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.hyundai.wewrite.domain.auth.service.AuthService;
 import site.hyundai.wewrite.domain.auth.service.GetUserService;
-import site.hyundai.wewrite.domain.comment.dto.CommentDTO;
 import site.hyundai.wewrite.domain.comment.dto.request.CommentRequestDTO;
+import site.hyundai.wewrite.domain.comment.dto.response.CommentDetailDTO;
 import site.hyundai.wewrite.domain.comment.dto.response.CommentGetListResponseDTO;
 import site.hyundai.wewrite.domain.comment.service.CommentService;
 import site.hyundai.wewrite.global.dto.ResponseSuccessDTO;
@@ -48,7 +48,7 @@ public class CommentController {
     @ApiOperation(value = "댓글 상세보기", notes = "댓글에 대한 상세보기를 가져옵니다.")
     @GetMapping("/detail/{commentId}")
     @ApiImplicitParam(name = "commentId", value = "commentId 를 주세요 ", required = true, dataTypeClass = Long.class, paramType = "path")
-    public ResponseEntity<ResponseSuccessDTO<CommentDTO>> getComment(@RequestHeader HttpHeaders headers, @PathVariable(value = "commentId") Long commentId) {
+    public ResponseEntity<ResponseSuccessDTO<CommentDetailDTO>> getComment(@RequestHeader HttpHeaders headers, @PathVariable(value = "commentId") Long commentId) {
         return ResponseEntity.ok(commentService.getComment(commentId));
     }
 
