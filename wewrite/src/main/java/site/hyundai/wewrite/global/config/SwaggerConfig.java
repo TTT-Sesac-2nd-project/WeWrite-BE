@@ -2,6 +2,7 @@ package site.hyundai.wewrite.global.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -30,15 +31,12 @@ public class SwaggerConfig implements WebMvcConfigurer {
 
     @Bean
     public Docket api() {
-        // List<Parameter> parameterList = new ArrayList<>();
-        // parameterList.add(apiKey()); // Add the apiKey as a global parameter
+
 
         return new Docket(DocumentationType.SWAGGER_2)
-                //                .consumes(getConsumeContentTypes())
-//                .produces(getProduceContentTypes())
-                .select()
-                .apis(RequestHandlerSelectors.any())
 
+                .select()
+                .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo())
@@ -55,9 +53,10 @@ public class SwaggerConfig implements WebMvcConfigurer {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("Wewrite API 문서")
-                .description("Wewrite API 문서입니다.")
-                .version("1.0.1")
+                .description("![TTT-logo](https://tttimagebucket.s3.ap-northeast-2.amazonaws.com/logo/%EB%A1%9C%EA%B3%A0%2Btext.png)")
+                .version("2.0.0")
                 .licenseUrl("https://github.com/TTT-Sesac-2nd-project")
+
                 .build();
     }
 
