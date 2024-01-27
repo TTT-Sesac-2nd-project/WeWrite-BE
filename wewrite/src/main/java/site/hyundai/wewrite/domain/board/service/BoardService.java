@@ -254,10 +254,11 @@ public class BoardService {
         return res;
     }
 
-    public BoardListDTO getBoardById(Long boardId) {
+    public BoardListDTO getBoardById(String userId, Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new EntityNullException("게시글 " + boardId + " 이 DB에 없습니다."));
         Long boardImageId = boardImageRepository.findOneLatestImageByBoardId(board.getBoardId()).getImageId();
         Long commentCount = commentRepository.getCommentCountByBoardId(board.getBoardId());
+        Long isBookMarked = bookmarkRepository.isBookmarked(userId, boardId) == true ? 1L : 0L;
         BoardListDTO boardListDTO = BoardListDTO.builder()
                 .boardId(board.getBoardId())
                 .boardTitle(board.getBoardTitle())
@@ -270,6 +271,7 @@ public class BoardService {
                 .userName(board.getUser().getUserName())
                 .userImage(board.getUser().getUserImage())
                 .boardViewCount(board.getBoardView())
+                .isBookmarked(isBookMarked)
                 .build();
         return boardListDTO;
     }

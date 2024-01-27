@@ -41,7 +41,7 @@ public class BookmarkService {
 
         for (Bookmark bookmark : bookmarks) {
             Board board = bookmark.getBoard();
-            BookmarkResponseDTO dto = new BookmarkResponseDTO(bookmark.getBookmarkId(), boardService.getBoardById(board.getBoardId()));
+            BookmarkResponseDTO dto = new BookmarkResponseDTO(bookmark.getBookmarkId(), boardService.getBoardById(userId, board.getBoardId()));
             bookmarkDTOs.add(dto);
         }
 
