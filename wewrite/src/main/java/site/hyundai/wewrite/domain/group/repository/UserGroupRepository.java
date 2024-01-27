@@ -15,7 +15,7 @@ import java.util.Optional;
 public interface UserGroupRepository extends JpaRepository<UserGroup, Long>, UserGroupRepositoryCustom{
     Optional<Object> findByGroupAndUser(Group group, User user);
 
-    List<UserGroup> findByUser(User user);
+    List<UserGroup> findByUserOrderByCreatedAt(User user);
 
     void deleteByGroup(Group group);
 

@@ -83,7 +83,7 @@ public class GroupService {
     @Transactional
     public ResponseSuccessDTO<List<GroupResponseDTO>> getMyGroups(String userId) {
         User user = getUserService.getUserByUserId(userId);
-        List<UserGroup> userGroups = userGroupRepository.findByUser(user);
+        List<UserGroup> userGroups = userGroupRepository.findByUserOrderByCreatedAt(user);
 
         List<GroupResponseDTO> myGroups = new ArrayList<>();
         for(UserGroup userGroup : userGroups) {
