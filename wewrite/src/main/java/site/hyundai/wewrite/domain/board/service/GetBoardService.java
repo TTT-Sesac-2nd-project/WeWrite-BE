@@ -7,6 +7,10 @@ import site.hyundai.wewrite.domain.board.repository.BoardRepository;
 import site.hyundai.wewrite.domain.entity.Board;
 import site.hyundai.wewrite.global.exeception.service.BadVariableRequestException;
 
+/**
+ * @author 이소민
+ */
+
 @Service
 @RequiredArgsConstructor
 public class GetBoardService {
