@@ -74,8 +74,11 @@ public class MapService {
         User user = userRepository.findById(userId).orElseThrow(() -> new EntityNullException("유저 정보가 없습니다."));
         List<MapBoardDTO> boardListDTOList = new ArrayList<>();
         for (Board b : totalBoardList) {
-
+            log.info("boardId : {}", b.getBoardId());
             Long boardImageId = boardImageRepository.findOneLatestImageByBoardId(b.getBoardId()).getImageId();
+            if (boardImageId == null) {
+                continue;
+            }
             MapBoardDTO mapBoardDTO = MapBoardDTO.builder()
                     .boardId(b.getBoardId())
                     .boardImage(imageRepository.findById(boardImageId).get().getUploadFileUrl())
