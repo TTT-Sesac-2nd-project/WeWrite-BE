@@ -20,7 +20,6 @@ import site.hyundai.wewrite.domain.bookmark.repository.BookmarkRepository;
 import site.hyundai.wewrite.domain.comment.repository.CommentRepository;
 import site.hyundai.wewrite.domain.entity.*;
 import site.hyundai.wewrite.domain.group.repository.GroupRepository;
-import site.hyundai.wewrite.domain.group.repository.UserGroupRepository;
 import site.hyundai.wewrite.domain.image.repository.ImageRepository;
 import site.hyundai.wewrite.domain.image.service.S3UploaderService;
 import site.hyundai.wewrite.global.dto.ResponseSuccessDTO;
@@ -34,7 +33,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author 김동욱
@@ -52,7 +50,6 @@ public class BoardService {
 
     private final GroupRepository groupRepository;
 
-    private final UserGroupRepository userGroupRepository;
 
     private final BoardImageRepository boardImageRepository;
 
@@ -71,9 +68,8 @@ public class BoardService {
             throw new EntityNullException("유저 정보가 없습니다.");
         }
         log.info(boardDTO.getGroupId() + "");
-        Group group = groupRepository.findById(boardDTO.getGroupId()).get();
-
-        User user = userRepository.findById(userId).get();
+        Group group = groupRepository.findById(boardDTO.getGroupId()).orElseThrow(() -> new EntityNullException("그룹 " + boardDTO.getGroupId() + " 이 DB에 없습니다."));
+        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNullException("유저 " + userId + " 이 DB에 없습니다."));
 
         Board board = Board.builder()
                 .boardTitle(boardDTO.getBoardTitle())
@@ -106,62 +102,6 @@ public class BoardService {
         return res;
     }
 
-//    public ResponseSuccessDTO<BoardListGetResponseDTO> getBoardList(String userId, Long groupId) {
-//
-//        if (userId == null) {
-//            throw new EntityNullException("유저 정보가 없습니다.");
-//        }
-//        List<Board> totalBoardList = new ArrayList<>();
-//        List<Board> boardList = new ArrayList<>();
-//
-//        if (groupId == 0) {
-//            List<UserGroup> userGroupList = userGroupRepository.getUserGroupsById(userId);
-//            if (userGroupList == null) {
-//                throw new EntityNullException("유저가 가입한 그룹이 없습니다. 그룹에 가입하고 글을 작성해주세요");
-//            }
-//            for (UserGroup u : userGroupList) {
-//                boardList = boardRepository.getBoardList(u.getGroup().getGroupId());
-//                for (Board b : boardList) {
-//                    totalBoardList.add(b);
-//                }
-//
-//            }
-//
-//        } else {
-//            boardList = boardRepository.getBoardList(groupId);
-//            for (Board b : boardList) {
-//                totalBoardList.add(b);
-//            }
-//        }
-//        Collections.sort(totalBoardList, Comparator.comparing(Board::getBoardCreatedDate));
-//        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNullException("유저 정보가 없습니다."));
-//        List<BoardListDTO> boardListDTOList = new ArrayList<>();
-//        for (Board b : totalBoardList) {
-//
-//            Long boardImageId = boardImageRepository.findOneLatestImageByBoardId(b.getBoardId()).getImageId();
-//            Long commentCount = commentRepository.getCommentCountByBoardId(b.getBoardId());
-//            BoardListDTO boardListDTO = BoardListDTO.builder()
-//                    .boardId(b.getBoardId())
-//                    .boardTitle(b.getBoardTitle())
-//                    .boardCreatedDate(timeService.parseLocalDateTimeForMap(b.getBoardCreatedDate()))
-//                    .userName(b.getUser().getUserName())
-//                    .groupName(b.getGroup().getGroupName())
-//                    .boardCommentCount(commentCount)
-//                    .boardLoc(b.getBoardLoc())
-//                    .boardImage(imageRepository.findById(boardImageId).get().getUploadFileUrl())
-//                    .userName(b.getUser().getUserName())
-//                    .boardViewCount(b.getBoardView())
-//                    .userImage(b.getUser().getUserImage())
-//                    .isBookmarked(bookmarkRepository.isBookmarked(userId, b.getBoardId()))
-//                    .build();
-//            boardListDTOList.add(boardListDTO);
-//
-//        }
-//        BoardListGetResponseDTO boardListGetResponseDTO = new BoardListGetResponseDTO();
-//        boardListGetResponseDTO.setBoardList(boardListDTOList);
-//        ResponseSuccessDTO<BoardListGetResponseDTO> res = responseUtil.successResponse(boardListGetResponseDTO, HttpStatus.OK);
-//        return res;
-//    }
 
     public ResponseSuccessDTO<BoardListGetResponseDTO> getBoardList(String userId, Long groupId, String sortedType) {
         if (userId == null) {
@@ -203,7 +143,7 @@ public class BoardService {
             isWriter = 0L;
         }
 
-
+        // 게시글 이미지 리스트
         List<String> boardImageStringList = new ArrayList<>();
         List<BoardImage> boardImageList = boardImageRepository.findAllByBoardId(boardId);
         for (BoardImage i : boardImageList) {
@@ -226,14 +166,11 @@ public class BoardService {
         if (boardId == null) {
             throw new EntityNullException("게시글 ID 가 없습니다,");
         }
-        Optional<Board> board = boardRepository.findById(boardId);
-        if (!board.isPresent()) {
-            throw new EntityNullException("게시글 " + boardId + " 이 DB에 없습니다.");
-        }
-        Board boardRes = board.get();
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new EntityNullException("게시글 " + boardId + " 이 DB에 없습니다."));
+
         // 수정
-        boardRes.setBoardTitle(boardDTO.getBoardTitle());
-        boardRes.setBoardContent(boardDTO.getBoardContent());
+        board.setBoardTitle(boardDTO.getBoardTitle());
+        board.setBoardContent(boardDTO.getBoardContent());
 
         ResponseSuccessDTO<String> res = responseUtil.successResponse("게시글" + boardId + " 번 수정 성공", HttpStatus.OK);
         return res;
@@ -244,10 +181,7 @@ public class BoardService {
         if (boardId == null) {
             throw new EntityNullException("게시글 ID 가 없습니다,");
         }
-        Optional<Board> board = boardRepository.findById(boardId);
-        if (!board.isPresent()) {
-            throw new EntityNullException("게시글 " + boardId + " 이 DB에 없습니다.");
-        }
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new EntityNullException("게시글 " + boardId + " 이 DB에 없습니다."));
         bookmarkRepository.deleteByBoardId(boardId);
         boardRepository.deleteById(boardId);
         ResponseSuccessDTO<String> res = responseUtil.successResponse("게시글" + boardId + " 번 삭제 성공", HttpStatus.OK);

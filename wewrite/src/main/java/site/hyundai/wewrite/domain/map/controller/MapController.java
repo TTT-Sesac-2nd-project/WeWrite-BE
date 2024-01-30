@@ -36,16 +36,5 @@ public class MapController {
         return ResponseEntity.ok(mapService.getMapList(getUserService.getUserByToken(headers), boardId));
     }
 
-//    @ApiOperation(value = "지도 게시글 상세보기", notes = "지도에 나온 게시글의 대한 정보를 조회합니다.")
-//    @GetMapping("/detail/{boardId}")
-//    @ApiImplicitParam(name = "boardId", value = "boardId 를 주세요.", required = true, dataTypeClass = Long.class, paramType = "path")
-//    public ResponseEntity<ResponseSuccessDTO<MapGetResponseDTO>> getMap(@RequestHeader HttpHeaders headers, @PathVariable(value = "boardId") Long boardId) {
-//
-//        String jwtToken = headers.get("token").toString();
-//        jwtToken = jwtToken.replace("[", "");
-//        jwtToken = jwtToken.replace("]", "");
-//        String userId = authService.getUserId(jwtToken); //userId 가져와짐
-//
-//        return ResponseEntity.ok(mapService.getMap(boardId));
-//    }
+
 }

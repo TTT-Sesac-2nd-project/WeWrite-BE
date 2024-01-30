@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import site.hyundai.wewrite.domain.auth.service.AuthService;
 import site.hyundai.wewrite.domain.auth.service.GetUserService;
 import site.hyundai.wewrite.domain.comment.dto.request.CommentRequestDTO;
 import site.hyundai.wewrite.domain.comment.dto.response.CommentDetailDTO;
@@ -25,7 +24,6 @@ import site.hyundai.wewrite.global.dto.ResponseSuccessDTO;
 @RequiredArgsConstructor
 @Api(tags = {"게시판 댓글 API"})
 public class CommentController {
-    private final AuthService authService;
     private final CommentService commentService;
     private final GetUserService getUserService;
 

@@ -66,6 +66,7 @@ public class CommentService {
         // 수정 삭제 버튼 추가 로직
 
         for (Comment c : commentList) {
+            // 작성자 검증 로직
             Long isWriter = c.getUser().getUserId().equals(userId) ? 1L : 0;
             CommentDTO commentDTO = CommentDTO.builder()
                     .commentId(c.getCommentId())

@@ -162,17 +162,17 @@ public class AuthService {
 
 
         //access-token을 파싱 하여 카카오 id가 디비에 있는지 확인
-        String user_id = httpUtil.parseToken(accessToken);
-        log.info("parse result : {}", user_id);
+        String userId = httpUtil.parseToken(accessToken);
+        log.info("parse result : {}", userId);
 
         AuthGetKakaoTokenDTO dto = new AuthGetKakaoTokenDTO();
         User user = new User();
-        if (user_id == null) { //카카오에서 에러
+        if (userId == null) { // 카카오에서 에러 발생
             log.error("유효하지 않은 토큰");
             throw new BadVariableRequestException("유효 하지 않은 토큰입니다.");
 
         } else { //DB에 회원정보있어? 없으면 insert하고 리턴
-            String url2 = "https://kapi.kakao.com/v1/oidc/userinfo";
+            String kakaoUserInfoURL = "https://kapi.kakao.com/v1/oidc/userinfo";
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -182,7 +182,7 @@ public class AuthService {
 
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
             RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<OpenIdResponseDto> response = restTemplate.exchange(url2, HttpMethod.GET, request, OpenIdResponseDto.class);
+            ResponseEntity<OpenIdResponseDto> response = restTemplate.exchange(kakaoUserInfoURL, HttpMethod.GET, request, OpenIdResponseDto.class);
 
             OpenIdResponseDto openIdResponseDto = response.getBody();
             String picture = openIdResponseDto.getPicture();
@@ -194,16 +194,15 @@ public class AuthService {
                     .userImage(picture)
                     .userName(openIdResponseDto.getNickname())
                     .build();
-            Optional<User> byId = userRepository.findById(user_id);
 
             userRepository.save(user);
             String token = jwtTokenProvider.createAccessToken(accessToken, user.getUserId());
-            Optional<User> returnUser = userRepository.findById(user.getUserId());
+            User returnUser = userRepository.findById(user.getUserId()).orElseThrow(() -> new EntityNullException("유저 " + userId + " 이 DB에 없습니다."));
 
 
             Token tokenDto = new Token();
             tokenDto.setTokenValue(accessToken);
-            tokenDto.setUser(returnUser.get());
+            tokenDto.setUser(returnUser);
 
             tokenRepsository.save(tokenDto);
             dto.setAccessToken(token);
@@ -220,29 +219,28 @@ public class AuthService {
 
     public ResponseSuccessDTO<String> validateToken(String jwtToken) {
         boolean result = jwtTokenProvider.validateToken(jwtToken);
-        String str = "";
-        if (result) {
-            str = "유효한 토큰입니다.";
-        }
+        String message = result ? "유효한 토큰입니다." : "";
 
-        ResponseSuccessDTO<String> res = responseUtil.successResponse(str, HttpStatus.OK);
-        return res;
+        return responseUtil.successResponse(message, HttpStatus.OK);
     }
+
 
     public String getUserId(String jwtToken) {
-        String userId = "";
         validateToken(jwtToken);
-        try {
-            Claims claims = Jwts.parser()
-                    .setSigningKey(secretKey)
-                    .parseClaimsJws(jwtToken)
-                    .getBody();
 
-            return claims.get("userId", String.class);
-        } catch (NullPointerException e) {
-            throw new EntityNullException("userId로 토큰을 넣어야합니다.");
+        Claims claims = Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(jwtToken)
+                .getBody();
+
+        String userId = claims.get("userId", String.class);
+
+        if (userId == null) {
+            throw new EntityNullException("토큰에서 userId를 찾을 수 없습니다.");
         }
 
+        return userId;
     }
+
 
 }

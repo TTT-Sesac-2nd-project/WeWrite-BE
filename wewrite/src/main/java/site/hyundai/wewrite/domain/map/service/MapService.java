@@ -12,7 +12,6 @@ import site.hyundai.wewrite.domain.entity.Board;
 import site.hyundai.wewrite.domain.entity.Image;
 import site.hyundai.wewrite.domain.entity.User;
 import site.hyundai.wewrite.domain.entity.UserGroup;
-import site.hyundai.wewrite.domain.group.repository.GroupRepository;
 import site.hyundai.wewrite.domain.group.repository.UserGroupRepository;
 import site.hyundai.wewrite.domain.image.repository.ImageRepository;
 import site.hyundai.wewrite.domain.map.dto.MapBoardDTO;
@@ -41,7 +40,6 @@ public class MapService {
     private final UserRepository userRepository;
     private final BoardImageRepository boardImageRepository;
     private final TimeService timeService;
-    private final GroupRepository groupRepository;
     private final UserGroupRepository userGroupRepository;
     private final ImageRepository imageRepository;
 
@@ -52,6 +50,7 @@ public class MapService {
         List<Board> totalBoardList = new ArrayList<>();
         List<Board> boardList = new ArrayList<>();
 
+        // 0 이 들어온 경우 전체 리스트 조회
         if (groupId == 0) {
             List<UserGroup> userGroupList = userGroupRepository.getUserGroupsById(userId);
             if (userGroupList == null) {

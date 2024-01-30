@@ -11,7 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import site.hyundai.wewrite.domain.auth.service.AuthService;
 import site.hyundai.wewrite.domain.auth.service.GetUserService;
 import site.hyundai.wewrite.domain.board.dto.BoardDTO;
 import site.hyundai.wewrite.domain.board.dto.request.BoardModifyRequestDTO;
@@ -34,7 +33,6 @@ import java.util.List;
 @Api(tags = {"게시판 API"})
 public class BoardController {
 
-    private final AuthService authService;
     private final BoardService boardService;
     private final GetUserService getUserService;
 
@@ -61,7 +59,6 @@ public class BoardController {
 
     @ApiOperation(value = "게시글 하나 조회", notes = "게시글 하나를 조회합니다.")
     @GetMapping("/{boardId}")
-
     @ApiImplicitParam(name = "boardId", value = "boardId 를 주세요 ", required = true, dataTypeClass = Long.class, paramType = "path")
     public ResponseEntity<ResponseSuccessDTO<BoardDTO>> getBoard(@RequestHeader HttpHeaders headers, @PathVariable(value = "boardId") Long boardId) {
 
@@ -70,10 +67,7 @@ public class BoardController {
 
     @ApiOperation(value = "게시글 수정", notes = "게시글을 수정합니다.")
     @PutMapping("/{boardId}")
-
     @ApiImplicitParam(name = "boardId", value = "boardId 를 주세요 ", required = true, dataTypeClass = Long.class, paramType = "path")
-
-
     public ResponseEntity<ResponseSuccessDTO<String>> modifyBoard(@RequestHeader HttpHeaders headers, @RequestBody BoardModifyRequestDTO boardDTO, @PathVariable(value = "boardId") Long boardId) {
 
         return ResponseEntity.ok(boardService.modifyBoard(boardDTO, boardId));
@@ -81,10 +75,8 @@ public class BoardController {
 
     @ApiOperation(value = "게시글 삭제", notes = "게시글을 삭제합니다.")
     @DeleteMapping("/{boardId}")
-
     @ApiImplicitParam(name = "boardId", value = "boardId 를 주세요 ", required = true, dataTypeClass = Long.class, paramType = "path")
     public ResponseEntity<ResponseSuccessDTO<String>> deleteBoard(@RequestHeader HttpHeaders headers, @PathVariable(value = "boardId") Long boardId) {
-
 
         return ResponseEntity.ok(boardService.deleteBoard(boardId));
     }

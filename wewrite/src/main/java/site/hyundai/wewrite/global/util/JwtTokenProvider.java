@@ -9,7 +9,6 @@ import site.hyundai.wewrite.global.exeception.service.BadVariableRequestExceptio
 import site.hyundai.wewrite.global.exeception.service.EntityNullException;
 import site.hyundai.wewrite.global.exeception.service.UnAuthorizedException;
 
-import javax.annotation.PostConstruct;
 import java.util.Date;
 
 /**
@@ -27,10 +26,6 @@ public class JwtTokenProvider {
     @Value("${security.jwt.refresh-token-expire}")
     private long refreshTokenExpireTime;
 
-    @PostConstruct
-    protected void init() {
-        //secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
-    }
 
     public String createAccessToken(String accessToken, String userId) {
         Date now = new Date();
