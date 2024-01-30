@@ -8,6 +8,11 @@ import site.hyundai.wewrite.domain.entity.Board;
 
 import javax.persistence.Tuple;
 import java.util.List;
+
+/**
+ * @author 이소민
+ */
+
 @Repository
 public interface BoardListRepository extends JpaRepository<Board, Long> {
 
